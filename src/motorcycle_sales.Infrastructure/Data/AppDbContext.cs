@@ -3,10 +3,12 @@ using motorcycle_sales.Core.ProjectAggregate;
 using motorcycle_sales.SharedKernel;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace motorcycle_sales.Infrastructure.Data;
 
-public class AppDbContext : DbContext
+public class AppDbContext : IdentityDbContext<IdentityUser>
 {
   private readonly IMediator? _mediator;
 

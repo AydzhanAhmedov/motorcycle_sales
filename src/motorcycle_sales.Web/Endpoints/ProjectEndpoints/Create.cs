@@ -31,7 +31,7 @@ public class Create : BaseAsyncEndpoint
     {
       return BadRequest();
     }
-
+    
     var newProject = new Project(request.Name);
 
     var createdItem = await _repository.AddAsync(newProject); // TODO: pass cancellation token
