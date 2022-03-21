@@ -23,7 +23,7 @@ public class AccountController : Controller
         return View();
     }
 
-    public async Task<IActionResult> Login(LoginViewModel loginViewModel, string returnUrl)
+    public async Task<IActionResult> Login(LoginViewModel loginViewModel, string? returnUrl = null)
     {
         if (!ModelState.IsValid)
             return View(loginViewModel);

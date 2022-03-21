@@ -22,6 +22,7 @@ string connectionString = builder.Configuration.GetConnectionString("DefaultConn
 
 builder.Services.AddDbContext(connectionString);
 
+
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>();
 
@@ -50,7 +51,6 @@ builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
   containerBuilder.RegisterModule(new DefaultInfrastructureModule(builder.Environment.EnvironmentName == "Development"));
 });
 
-
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 //builder.Logging.AddAzureWebAppDiagnostics(); add this if deploying to Azure
@@ -68,6 +68,9 @@ else
   app.UseHsts();
 }
 app.UseRouting();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
