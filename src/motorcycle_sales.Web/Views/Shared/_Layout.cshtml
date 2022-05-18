@@ -7,7 +7,7 @@
     <title>@ViewData["Title"] - motorcycle_sales.Web</title>
 
     <environment names="Development">
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.css" />
         <link rel="stylesheet" href="~/css/site.css" />
     </environment>
     <environment names="Staging,Production">
@@ -18,20 +18,17 @@
     </environment>
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-static-top">
-        <div class="container">
+    <div class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
                 </button>
                 <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">motorcycle_sales.Web</a>
             </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a asp-area="" asp-controller="Home" asp-action="Index" class="nav-link">Home</a></li>
                     @if (signInManager.IsSignedIn(User))
                     {
                         var userID = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -52,21 +49,25 @@
                             <a asp-controller="account" asp-action="login" class="nav-link">Login</a>
                         </li>
                     }
+                    <li><a asp-area="" asp-controller="Advertisement" asp-action="Create" class="nav-link">List an item</a></li>
                 </ul>
             </div>
         </div>
     </div>
     <div class="container body-content">
         @RenderBody()
-        <hr />
+        
         <footer>
+            <hr />
             <p>&copy; @DateTime.Today.Year - motorcycle_sales.Web</p>
         </footer>
     </div>
 
     <environment names="Development">
-        <script src="~/lib/jquery/dist/jquery.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="~/lib/jquery/jquery.js"></script>
+        <script src="~/lib/jquery-validate/jquery.validate.js"></script>
+        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+        <script src="~/lib/bootstrap/js/bootstrap.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
     </environment>
     <environment names="Staging,Production">
@@ -81,6 +82,6 @@
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
 
-@await RenderSectionAsync("scripts", required: false).ConfigureAwait(false)
+    @await RenderSectionAsync("scripts", required: false).ConfigureAwait(false)
 </body>
 </html>
