@@ -40,4 +40,8 @@
     <ProjectReference Include="..\motorcycle_sales.Infrastructure\motorcycle_sales.Infrastructure.csproj" />
   </ItemGroup>
   
+  <ItemGroup>
+    <Folder Include="wwwroot\images\" />
+  </ItemGroup>
+  
 </Project>

@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Ardalis.Specification;
+using Microsoft.AspNetCore.Mvc;
+using motorcycle_sales.Core;
+using motorcycle_sales.Core.Entities.AdvertisementAggregate;
+using motorcycle_sales.SharedKernel.Interfaces;
 
 namespace motorcycle_sales.Web.Controllers;
 
@@ -10,13 +14,21 @@ namespace motorcycle_sales.Web.Controllers;
 /// </summary>
 public class HomeController : Controller
 {
-  public IActionResult Index()
-  {
-    return View();
-  }
+    private readonly IReadRepository<Advertisement> _advertisementRepository;
 
-  public IActionResult Error()
-  {
-    return View();
-  }
+    public HomeController(IReadRepository<Advertisement> advertisementRepository)
+    {
+        _advertisementRepository = advertisementRepository;
+    }
+
+    public async Task<IActionResult> IndexAsync()
+    {
+        List<Advertisement> advertisements = await _advertisementRepository.ListAsync(new AdvertisementWithDetailsSpecification());
+        return View(advertisements);
+    }
+
+    public IActionResult Error()
+    {
+        return View();
+    }
 }

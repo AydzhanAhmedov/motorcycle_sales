@@ -44,7 +44,8 @@ public class AdvertisementController : Controller
             createAdvertisementModel.Brands = new SelectList(Enumerable.Empty<SelectList>()) ;
 
             return View(createAdvertisementModel);
-        }
+        }         
+
 
         string uniqueFileName = null;
 
