@@ -23,6 +23,9 @@ public class CreateAdvertisementModel
     public int BrandId { get; set; }
     public SelectList? Brands { get; set; }
     public int ProductionYear { get; set; }
+    public SelectList? Years { get; set; }
+    public int Month { get; set; }
+    public SelectList? Months { get; set; }
     public EngineType EngineType { get; set; }
     public string Modification { get; set; }
     public int HorsePower { get; set; }

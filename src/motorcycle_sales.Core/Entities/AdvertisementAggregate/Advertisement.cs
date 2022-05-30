@@ -21,8 +21,10 @@ public class Advertisement : BaseEntity, IAggregateRoot
     public TransmissionType TransmissionType { get; set; }
     public CoolingSystemType CoolingSystemType { get; set; }
     public int ProductionYear { get; set; }
+    public int ProductionMonth { get; set; }
     public double Price { get; set; }
     public int Mileage { get; set; }
     public string? Description { get; set; }
     public string? PhotoPath { get; set; }
+    public string UserId { get; set; }
 }
