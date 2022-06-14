@@ -3,35 +3,45 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using motorcycle_sales.Core;
 using motorcycle_sales.Core.Entities.AdvertisementAggregate;
+using motorcycle_sales.Core.Interfaces;
+using motorcycle_sales.Core.Services;
 using motorcycle_sales.SharedKernel.Interfaces;
 using motorcycle_sales.Web.ViewModels;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace motorcycle_sales.Web.Controllers;
 
+[Authorize]
 public class AdvertisementController : Controller
 {
+    private readonly IAdvertisementService _advertisementService;
     private readonly IReadRepository<Brand> _brandRepository;
     private readonly IReadRepository<Model> _modelRepository;
     private readonly IRepository<Advertisement> _advertisementRepository;
+    private readonly IRepository<UserSearchFilter> _userSearchFilteRepository;
     private readonly IHostingEnvironment _hostingEnvironment;
 
-    public AdvertisementController(IReadRepository<Model> modelRepository
+    public AdvertisementController(IAdvertisementService advertisementService
+        , IReadRepository<Model> modelRepository
         , IReadRepository<Brand> brandRepository
-        , IRepository<Advertisement> advertisementRepository, IHostingEnvironment hostingEnvironment)
+        , IRepository<Advertisement> advertisementRepository
+        , IRepository<UserSearchFilter> userSearchFilterRepository
+        , IHostingEnvironment hostingEnvironment)
     {
-
+        _advertisementService = advertisementService;
         _brandRepository = brandRepository;
         _modelRepository = modelRepository;
         _advertisementRepository = advertisementRepository;
+        _userSearchFilteRepository = userSearchFilterRepository;
         _hostingEnvironment = hostingEnvironment;
     }
 
     [Authorize]
     public async Task<IActionResult> Create()
     {
-        CreateAdvertisementModel createAdvertisementModel = new CreateAdvertisementModel();
+        CreateAdvertisementViewModel createAdvertisementModel = new CreateAdvertisementViewModel();
         List<Brand> brands = await _brandRepository.ListAsync();
         createAdvertisementModel.Brands = new SelectList(brands, "Id", "Name");
         
@@ -53,7 +63,7 @@ public class AdvertisementController : Controller
     }
 
     [HttpPost]
-    public ActionResult Create(CreateAdvertisementModel createAdvertisementModel)
+    public ActionResult Create(CreateAdvertisementViewModel createAdvertisementModel)
     {
         if (!ModelState.IsValid)
         {
@@ -99,13 +109,76 @@ public class AdvertisementController : Controller
         return RedirectToAction("index", "home");
     }
 
-    [Authorize]
+    [AllowAnonymous]
     public async Task<JsonResult> GetModels(int id)
     {
         // TODO Use specifications 
         List<Model> models = await _modelRepository.ListAsync(); 
         List<Model> modelsFiltered = models.Where(model => (model.BrandId == id)).ToList();
-
+        //modelsFiltered.Insert(0, new Model
+        //{
+        //    Name = ""
+        //});
         return Json(new SelectList(modelsFiltered, "Id", "Name"));
+    }
+
+    [HttpGet]
+    [AllowAnonymous]
+    public async Task<ActionResult> View(int id)
+    {
+        var advertisementByIdSpec = new AdvertisementWithDetailsSpecification(id);
+        var advertisement = await _advertisementRepository.GetBySpecAsync(advertisementByIdSpec);
+
+        return View(advertisement);
+    }
+
+    [HttpGet]
+    [AllowAnonymous]
+    public async Task<ActionResult> Search()
+    {
+        SearchAdvertisementViewModel model = new SearchAdvertisementViewModel();
+
+        List<Brand> brands = await _brandRepository.ListAsync();
+        //brands.Insert(0, new Brand
+        //{
+        //    Name = ""
+        //});
+        model.Brands = new SelectList(brands, "Id", "Name");
+
+        return View(model);
+    }
+
+    [HttpPost]
+    [AllowAnonymous]
+    public async Task<ActionResult> Search(SearchAdvertisementViewModel model)
+    { 
+        model.Advertisements = await _advertisementService.GetAdvertisementsByFilter(model.AdvertisementSearchFilter);
+
+        List<Brand> brands = await _brandRepository.ListAsync();
+        brands.Insert(0, new Brand
+        {
+            Name = ""
+        });
+
+        model.Brands = new SelectList(brands, "Id", "Name", String.Empty);
+
+        return View(model);
+    }
+
+
+    public async Task<IActionResult> SaveSearchFilter(AdvertisementSearchFilter searchFilter)
+    {
+        var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        var userSearchFilter = new UserSearchFilter()
+        {
+            AdvertisementSearchFilter = searchFilter,
+            UserId = currentUserId,
+            CreateTime = DateTime.Now
+        };
+
+        _userSearchFilteRepository.AddAsync(userSearchFilter);
+
+        return Ok();
     }
 }

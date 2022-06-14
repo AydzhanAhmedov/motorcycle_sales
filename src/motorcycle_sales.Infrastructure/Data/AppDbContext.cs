@@ -28,12 +28,14 @@ public class AppDbContext : IdentityDbContext<IdentityUser>
     public DbSet<Brand> Brands { get; set; }
     public DbSet<Brand> Models { get; set; }
     public DbSet<Advertisement> Advertisements { get; set; }
+    public DbSet<UserSearchFilter> UserSearchFilter { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.ApplyAllConfigurationsFromCurrentAssembly();
+
 
         //modelBuilder.Entity<Advertisement>()
         //    .HasOne(ad => ad.Model)

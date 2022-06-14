@@ -84,4 +84,10 @@ public class AccountController : Controller
         await signInManager.SignOutAsync();
         return RedirectToAction("index", "home");
     }
+
+    [HttpGet]
+    public async Task<IActionResult> Profile()
+    { 
+        return View();
+    }
 }

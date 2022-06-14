@@ -1,0 +1,35 @@
+﻿@model IEnumerable<Advertisement>
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    @foreach (var advertisement in Model)
+    {
+
+        var photoPath = "~/Images/" + (advertisement.PhotoPath ?? "nophoto.jpg");
+        var price = advertisement.Price > 0 ? advertisement.Price + " EUR" : "По договаряне";
+        <div class="col">
+            <div class="card">
+
+                <div class="card-header">
+                    <h3>@advertisement.Brand.Name @advertisement.Model.Name</h3>
+                </div>
+
+
+                <img class="card-img-top image-thumbnail" src="@photoPath" asp-append-version="true" />
+                <div>
+                    <h4 class="ad-price">@price</h4>
+                </div>
+                <a asp-controller="advertisement" asp-action="view"
+               asp-route-id="@advertisement.Id"
+               class="stretched-link"></a>
+            </div>
+        </div>
+        @*        <div class="card m-3 card-3" style="width: 18rem;">
+            <img class="card-img-top" src="@photoPath" alt="Card image cap" asp-append-version="true">
+            <div class="card-body">
+            <h5 class="card-title">Card title</h5>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            <a href="#" class="btn btn-primary">Go somewhere</a>
+            </div>
+            </div>*@
+    }
+</div>

@@ -1,0 +1,60 @@
+﻿@model Advertisement
+
+@{
+    ViewBag.Title = "View Advertisement";
+}
+
+@{
+    <div class="container">
+        <br>
+        <div class="row">
+            <div class="col ad-nav">
+                <button> Favorite This ❤️</button>
+                <button> Report 🚩</button>
+                <button> Edit ⚙️</button>
+                <!-- TODO Show this when advertisements is favorited -->
+                <!-- <button> Favorite ✔️</button> -->
+            </div>
+            <div class="col">
+
+                <!-- TODO -->
+                <!-- Advertisement creation date -->
+                <p class="align-right">20.05.2022 15:33</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <h1>Yamaha R6</h1>
+            </div>
+            <div class="col">
+                <h1 class="align-right">5000 EUR</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 image-col">
+                <img class="image-viewad" src="\Images\3a0d18d9-6a80-4472-b040-baa7be7acb3eb79c27b8-a296-4c85-8baf-a2f08940f0e3_S_7.2_360_13.jpg"> </img>
+            </div>
+            <div class="col-md-6 motorcycle-description">
+                <ul>
+                    <li>Production year: 2002 June</li>
+                    <li>Engine type: Diesel</li>
+                    <li>Horse Power: 200hp</li>
+                    <li>Engine Capacity: 500cc</li>
+                    <li>Transmission Type: Manual</li>
+                    <li>Cooling System: Water</li>
+                    <li>Mileage: 15 000 Km</li>
+
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <!-- TODO Add advrtisement creation date initialize it when ad is inserted to database -->
+                <!-- Advertisement creation date -->
+                <br>
+                <h5> Additional Description:</h5>
+                <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis scelerisque erat sit amet consectetur luctus. Nullam non ipsum aliquam, feugiat purus at, vulputate erat. Maecenas tortor massa, imperdiet sed nunc ut, sollicitudin egestas nulla. Vestibulum et augue quis ipsum semper aliquam a eu lectus. Etiam eu ultricies magna. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Sed dictum erat quis laoreet mollis. Fusce ultrices erat quis dui commodo, et mollis libero posuere. Suspendisse sit amet nulla eget nibh mollis tristique. Morbi venenatis lobortis ipsum, sit amet dictum lectus gravida sit amet. Maecenas quis massa dapibus mauris venenatis tempus at at ante. Nullam sollicitudin, ligula eget rhoncus porta, nisl odio ultrices lorem, quis sagittis libero tortor sit amet orci. Ut in est elementum, tristique justo in, volutpat tortor.</p>
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,171 @@
+﻿@model SearchAdvertisementViewModel
+
+@{
+    ViewBag.Title = "Search Advertisement";
+}
+
+@*@Html.HiddenFor(m => m.SearchFilter.bikeBrands)
+    @for (int i = 0; i < Model.searchFilter.bikeBrands.Count; i++)
+    {
+    @Html.HiddenFor(model => model.searchFilter.bikeBrands[i])
+    }
+*@
+
+<form method="post" enctype="multipart/form-data">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="row">
+                <div class="form-group col-sm">
+                    <label> Brand </label>
+                    @Html.DropDownListFor(x => Model.AdvertisementSearchFilter.BrandId, Model.Brands, htmlAttributes: new { @class = "form-control", id = "Brands" })
+                    @Html.ValidationMessageFor(x => x.AdvertisementSearchFilter.BrandId, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group col-sm">
+                    <label> Model </label>
+                    @Html.DropDownListFor(x => Model.AdvertisementSearchFilter.ModelId, Enumerable.Empty<SelectListItem>(), htmlAttributes: new { @class = "form-control", id = "Models" })
+                    @Html.ValidationMessageFor(x => x.AdvertisementSearchFilter.ModelId, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row padding-top">
+                <div class="input-group">
+                    <div class="col-4">
+                        <label style="margin-right: 20px; margin-top: 5px;">Price </label>
+                    </div>
+                    <input class="form-control input-group-first" asp-for="AdvertisementSearchFilter.PriceFrom" type="text" placeholder="From"></input>
+                    <span class="input-group-text">-</span>
+                    <input class="form-control input-group-second" asp-for="AdvertisementSearchFilter.PriceTo" type="text" placeholder="To"></input>
+
+                </div>
+            </div>
+            <div class="row padding-top">
+                <div class="input-group">
+                    <div class="col-4">
+                        <label style="margin-right: 20px; margin-top: 5px;">Production year </label>
+                    </div>
+                    <input class="form-control input-group-first" asp-for="AdvertisementSearchFilter.ProductionYearFrom" type="text" placeholder="From"></input>
+                    <span class="input-group-text">-</span>
+                    <input class="form-control input-group-second" asp-for="AdvertisementSearchFilter.ProductionYearTo" type="text" placeholder="To"></input>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+
+            <div class="row">
+                <div class="form-group">
+                    <label>Engine Type</label>
+                    @Html.DropDownListFor(x => Model.AdvertisementSearchFilter.EngineType, Html.GetEnumSelectList(typeof(EngineType)), "", htmlAttributes: new { @class = "form-control", id = "EngineTypes" })
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <label>Transmision Type</label>
+                    @Html.DropDownListFor(x => Model.AdvertisementSearchFilter.TransmissionType, Html.GetEnumSelectList(typeof(TransmissionType)), "", htmlAttributes: new { @class = "form-control", id = "TransmissionTypes" })
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <label>Cooling System</label>
+                    @Html.DropDownListFor(x => Model.AdvertisementSearchFilter.CoolingSystemType, Html.GetEnumSelectList(typeof(CoolingSystemType)), "", htmlAttributes: new { @class = "form-control", id = "CoolingSystemTypes" })
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+
+    <div class="row g-2">
+        <div class="col">
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Search</button>
+        </div>
+        @if (Context.Request.Method == "POST" && User.Identity.IsAuthenticated)
+        {
+            <div class="col-lg-3 col-md-4 col-sm-4">
+                <button id="SaveSearchFilter" class="btn btn-outline-dark" style="width: 100%;"> Save Search ❤️ </button>
+            </div>
+        }
+    </div>
+
+</form>
+<br />
+@{
+    if (Model.Advertisements != null)
+        @Html.Partial("_AdvertisementsList", Model.Advertisements)
+}
+
+<!-- TODO -->
+<!-- Optimize this, prevent dropdownlist from clearing and save selected value -->
+@section Scripts {
+
+
+<script type="text/javascript">
+
+     $(function () {
+            $("#SaveSearchFilter").click(function () {
+                let searchFilter = @Html.Raw(Json.Serialize(Model.AdvertisementSearchFilter));
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("SaveSearchFilter")',
+                    data: searchFilter,
+                    success: function (response) {
+                        alert("Filter saved ");
+                    },
+                    failure: function (response) {
+                        alert(response.responseText);
+                    },
+                    error: function (response) {
+                        alert(response.responseText);
+                   }
+                });
+            });
+        });
+
+        function onChange() {
+        var selectedBrand = $("#Brands").val();
+        console.log(selectedBrand)
+        $("#Models").empty();
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetModels")',
+            dataType: 'json',
+            data: {
+                id: selectedBrand
+            },
+            success: function(mems) {
+                $("#Models").append('<option value=""></option>');
+                $.each(mems, function(i, member) {
+                    console.log(member)
+                    $("#Models").append('<option value="' +
+                        member.value + '">' +
+                        member.text + '</option>');
+                });
+            },
+            error: function(ex) {
+                console.log("error")
+                alert('Failed to retrieve models.' + ex);
+            }
+        });
+        return false;
+    }
+
+    $(document).ready(function() {
+        $("#Brands").prepend('<option value=""></option>');
+
+        let selectedBrand = @Html.Raw(Json.Serialize(Model.AdvertisementSearchFilter.BrandId?? 0));
+        if (selectedBrand == 0)
+            $("#Brands").val(0);
+
+        $("#Brands").change(function() {
+            console.log("calling on chane")
+            onChange();
+        })
+
+
+        if ($("#Brands").val() != 0)
+            onChange();
+    });
+</script>
+
+
+}

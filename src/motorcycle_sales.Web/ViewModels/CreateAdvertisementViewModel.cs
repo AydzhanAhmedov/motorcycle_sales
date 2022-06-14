@@ -5,7 +5,7 @@ using motorcycle_sales.Core.Entities.AdvertisementAggregate;
 
 namespace motorcycle_sales.Web.ViewModels;
 
-public class CreateAdvertisementModel
+public class CreateAdvertisementViewModel
 {
     // Input data
 
