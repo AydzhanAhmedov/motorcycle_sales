@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace motorcycle_sales.Core.Entities;
 
-public class BaseEntity
-{
-    public virtual int Id { get; protected set; }
-}
+//public class BaseEntity
+//{
+//    public virtual int Id { get; protected set; }
+//}

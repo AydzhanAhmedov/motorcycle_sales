@@ -1,19 +1,27 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using motorcycle_sales.Core.Interfaces;
 using motorcycle_sales.Web.ViewModels;
 
 namespace motorcycle_sales.Web.Controllers;
 public class AccountController : Controller
 {
-    private readonly SignInManager<IdentityUser> signInManager;
-    private readonly UserManager<IdentityUser> userManager;
+    private readonly SignInManager<IdentityUser> _signInManager;
+    private readonly UserManager<IdentityUser> _userManager;
+    private readonly IAdvertisementService _advertisementService;
+    private readonly IUserSearchFilterService _userSearchFilterService;
 
     public AccountController(SignInManager<IdentityUser> signInManager
-        , UserManager<IdentityUser> userManager)
+        , UserManager<IdentityUser> userManager
+        , IAdvertisementService advertisementService
+        , IUserSearchFilterService userSearchFilterService)
     {
-        this.signInManager = signInManager;
-        this.userManager = userManager;
+        this._signInManager = signInManager;
+        this._userManager = userManager;
+        this._advertisementService = advertisementService;
+        this._userSearchFilterService = userSearchFilterService;
     }
 
     [HttpGet]
@@ -28,7 +36,7 @@ public class AccountController : Controller
         if (!ModelState.IsValid)
             return View(loginViewModel);
 
-        var result = await signInManager.PasswordSignInAsync(loginViewModel.Email, loginViewModel.Password, loginViewModel.RememberMe, false);
+        var result = await _signInManager.PasswordSignInAsync(loginViewModel.Email, loginViewModel.Password, loginViewModel.RememberMe, false);
 
         if (result.Succeeded)
         {
@@ -62,11 +70,11 @@ public class AccountController : Controller
             Email = model.Email
         };
 
-        var result = await userManager.CreateAsync(identityUser, model.Password);
+        var result = await _userManager.CreateAsync(identityUser, model.Password);
 
         if (result.Succeeded)
         {
-            await signInManager.SignInAsync(identityUser, isPersistent: false);
+            await _signInManager.SignInAsync(identityUser, isPersistent: false);
             return RedirectToAction("index", "home");
         }
 
@@ -81,13 +89,35 @@ public class AccountController : Controller
     [HttpGet]
     public async Task<IActionResult> Logout()
     {
-        await signInManager.SignOutAsync();
+        await _signInManager.SignOutAsync();
         return RedirectToAction("index", "home");
     }
 
     [HttpGet]
-    public async Task<IActionResult> Profile()
-    { 
-        return View();
+    public async Task<IActionResult> Profile(string Id)
+    {
+        var test = ClaimTypes.NameIdentifier;
+        var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        if (Id == null)
+        {
+            return NotFound();
+        }
+
+        // Check if user is looking at own profile
+        if (Id != currentUserId)
+        {
+            return BadRequest();
+        }
+
+        var profileViewModel = new ProfileViewModel();
+
+        profileViewModel.Advertisements = await _advertisementService.GetAdvertisementsByUserId(Id);
+        profileViewModel.UserSearchFilters = await _userSearchFilterService.GetUserSearchFiltersByUserId(Id);
+        profileViewModel.User = await _userManager.GetUserAsync(HttpContext.User);
+
+
+
+        return View(profileViewModel);
     }
 }

@@ -8,7 +8,8 @@ using motorcycle_sales.Core.Entities.AdvertisementAggregate;
 
 namespace motorcycle_sales.Core.Interfaces;
 
-public interface IAdvertisementService
+public interface IUserSearchFilterService
 {
-    Task<Result<List<Advertisement>>> GetAdvertisementsByFilter(AdvertisementSearchFilter advertisementSearchFilter);
+    Task<Result<List<UserSearchFilter>>> GetUserSearchFiltersByUserId(string UserId);
+    Task<Result<List<UserSearchFilter>>> GetMatchingFiltersForAdvertisement(Advertisement advertisement);
 }

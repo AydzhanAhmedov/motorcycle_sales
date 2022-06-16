@@ -13,5 +13,8 @@ public class DefaultCoreModule : Module
 
     builder.RegisterType<AdvertisementService>()
         .As<IAdvertisementService>().InstancePerLifetimeScope();
+
+    builder.RegisterType<UserSearchFilterService>()
+        .As<IUserSearchFilterService>().InstancePerLifetimeScope();
     }
 }

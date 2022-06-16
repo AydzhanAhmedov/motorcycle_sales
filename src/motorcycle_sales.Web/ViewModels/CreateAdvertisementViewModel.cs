@@ -26,11 +26,14 @@ public class CreateAdvertisementViewModel
     public SelectList? Years { get; set; }
     public int Month { get; set; }
     public SelectList? Months { get; set; }
+    [DisplayName("Engine Type")]
     public EngineType EngineType { get; set; }
     public string Modification { get; set; }
     public int HorsePower { get; set; }
     public int EngineCapacity { get; set; }
+    [DisplayName("Transmission Type")]
     public TransmissionType TransmissionType { get; set; }
+    [DisplayName("Cooling System")]
     public CoolingSystemType CoolingSystemType { get; set; }
     public double Price { get; set; }
     public int Mileage { get; set; }

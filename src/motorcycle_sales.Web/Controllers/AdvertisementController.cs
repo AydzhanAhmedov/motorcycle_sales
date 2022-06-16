@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using motorcycle_sales.Core;
 using motorcycle_sales.Core.Entities.AdvertisementAggregate;
 using motorcycle_sales.Core.Interfaces;
+using motorcycle_sales.Core.ProjectAggregate.Events;
 using motorcycle_sales.Core.Services;
+using motorcycle_sales.Core.Specifications;
 using motorcycle_sales.SharedKernel.Interfaces;
 using motorcycle_sales.Web.ViewModels;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
@@ -22,13 +24,16 @@ public class AdvertisementController : Controller
     private readonly IRepository<Advertisement> _advertisementRepository;
     private readonly IRepository<UserSearchFilter> _userSearchFilteRepository;
     private readonly IHostingEnvironment _hostingEnvironment;
+    private readonly ILogger<AdvertisementController> _logger;
 
     public AdvertisementController(IAdvertisementService advertisementService
         , IReadRepository<Model> modelRepository
         , IReadRepository<Brand> brandRepository
         , IRepository<Advertisement> advertisementRepository
         , IRepository<UserSearchFilter> userSearchFilterRepository
-        , IHostingEnvironment hostingEnvironment)
+        , IHostingEnvironment hostingEnvironment
+        , ILogger<AdvertisementController> logger
+        , IUserSearchFilterService userSearchFilterService)
     {
         _advertisementService = advertisementService;
         _brandRepository = brandRepository;
@@ -36,6 +41,7 @@ public class AdvertisementController : Controller
         _advertisementRepository = advertisementRepository;
         _userSearchFilteRepository = userSearchFilterRepository;
         _hostingEnvironment = hostingEnvironment;
+        _logger = logger;
     }
 
     [Authorize]
@@ -63,8 +69,10 @@ public class AdvertisementController : Controller
     }
 
     [HttpPost]
-    public ActionResult Create(CreateAdvertisementViewModel createAdvertisementModel)
+    public async Task<ActionResult> CreateAsync(CreateAdvertisementViewModel createAdvertisementModel)
     {
+        _logger.LogDebug("Testting log controller asdf");
+
         if (!ModelState.IsValid)
         {
             createAdvertisementModel.Brands = new SelectList(Enumerable.Empty<SelectList>()) ;
@@ -101,10 +109,20 @@ public class AdvertisementController : Controller
             Mileage = createAdvertisementModel.Mileage,
             Description = createAdvertisementModel.Description,
             PhotoPath = uniqueFileName,
-            UserId = User.FindFirstValue(ClaimTypes.NameIdentifier)
+            UserId = User.FindFirstValue(ClaimTypes.NameIdentifier),
+            CreationDate = DateTime.Now
         };
 
-        _advertisementRepository.AddAsync(advertisement);
+        _logger.LogDebug("Inserting new advertisement");
+
+        UserSearchFilterSpecification x = new UserSearchFilterSpecification(advertisement);
+        var filters = await _userSearchFilteRepository.ListAsync(x);
+
+        // Add event for email notification
+        advertisement.Events.Add(new NewAdvertisementCreatedEvent(advertisement));
+
+        await _advertisementRepository.AddAsync(advertisement);
+
 
         return RedirectToAction("index", "home");
     }
@@ -173,6 +191,7 @@ public class AdvertisementController : Controller
         var userSearchFilter = new UserSearchFilter()
         {
             AdvertisementSearchFilter = searchFilter,
+            FilterName = "Filter ",
             UserId = currentUserId,
             CreateTime = DateTime.Now
         };

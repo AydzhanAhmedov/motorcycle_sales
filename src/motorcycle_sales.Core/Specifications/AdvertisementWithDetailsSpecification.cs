@@ -17,10 +17,18 @@ public class AdvertisementWithDetailsSpecification : Specification<Advertisement
     .Include(ad => ad.Model);
     }
 
-    public AdvertisementWithDetailsSpecification(int id)
+    public AdvertisementWithDetailsSpecification(int Id)
     {
         Query
-    .Where(ad => ad.Id == id)
+    .Where(ad => ad.Id == Id)
+    .Include(ad => ad.Brand)
+    .Include(ad => ad.Model);
+    }
+
+    public AdvertisementWithDetailsSpecification(string Id)
+    {
+        Query
+    .Where(ad => ad.UserId == Id)
     .Include(ad => ad.Brand)
     .Include(ad => ad.Model);
     }

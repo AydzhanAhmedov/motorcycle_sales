@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using motorcycle_sales.SharedKernel;
 using motorcycle_sales.SharedKernel.Interfaces;
 
 namespace motorcycle_sales.Core.Entities.AdvertisementAggregate;
@@ -27,4 +28,5 @@ public class Advertisement : BaseEntity, IAggregateRoot
     public string? Description { get; set; }
     public string? PhotoPath { get; set; }
     public string UserId { get; set; }
+    public DateTime CreationDate { get; set; }
 }

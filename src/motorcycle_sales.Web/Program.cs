@@ -7,6 +7,7 @@ using motorcycle_sales.Infrastructure.Data;
 using motorcycle_sales.Web;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Identity;
+using motorcycle_sales.Core.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,7 +22,7 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
 string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");  //Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddDbContext(connectionString);
-
+builder.Services.AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>();

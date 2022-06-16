@@ -18,11 +18,13 @@ public class AdvertisementService : IAdvertisementService
     {
         _advertisementRepository = advertisementRepository;
     }
-    
-    public IEnumerable<Advertisement> GetAdvertisementsByFilter(AdvertisementSearchFilter filter)
+
+    public async Task<Result<List<Advertisement>>> GetAdvertisementsByUserId(string userId)
     {
-        var specification = new AdvertisementWithDetailsSpecification(filter);
-        return (IEnumerable<Advertisement>)_advertisementRepository.GetBySpecAsync(specification);
+        var specification = new AdvertisementWithDetailsSpecification(userId);
+        var advertisements = await _advertisementRepository.ListAsync(specification);
+
+        return new Result<List<Advertisement>>(advertisements);
     }
 
     async Task<Result<List<Advertisement>>> IAdvertisementService.GetAdvertisementsByFilter(AdvertisementSearchFilter advertisementSearchFilter)

@@ -54,7 +54,9 @@ public class AppDbContext : IdentityDbContext<IdentityUser>
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
     {
-        int result = await base.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        int result = await base.SaveChangesAsync(cancellationToken);
+
+        Console.WriteLine("Result " + result);
 
         // ignore events if no dispatcher provided
         if (_mediator == null) return result;
@@ -71,7 +73,7 @@ public class AppDbContext : IdentityDbContext<IdentityUser>
             entity.Events.Clear();
             foreach (var domainEvent in events)
             {
-                await _mediator.Publish(domainEvent).ConfigureAwait(false);
+                await _mediator.Publish(domainEvent);
             }
         }
 

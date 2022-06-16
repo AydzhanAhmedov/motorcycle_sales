@@ -7,6 +7,8 @@ using motorcycle_sales.SharedKernel.Interfaces;
 using MediatR;
 using MediatR.Pipeline;
 using Module = Autofac.Module;
+using motorcycle_sales.Core.Services;
+using motorcycle_sales.Core.ProjectAggregate.Handlers;
 
 namespace motorcycle_sales.Infrastructure;
 
@@ -83,11 +85,11 @@ public class DefaultInfrastructureModule : Module
 
     builder.RegisterType<EmailSender>().As<IEmailSender>()
         .InstancePerLifetimeScope();
-  }
+    }
 
   private void RegisterDevelopmentOnlyDependencies(ContainerBuilder builder)
   {
-    // TODO: Add development only services
+   // TODO: Add production only services
   }
 
   private void RegisterProductionOnlyDependencies(ContainerBuilder builder)

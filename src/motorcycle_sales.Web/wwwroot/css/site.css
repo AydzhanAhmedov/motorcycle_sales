@@ -24,6 +24,11 @@ a {
   border-color: #1861ac;
 }
 
+.fucking-button-profile-ad
+{
+    align-self: center;
+    text-align: end;
+}
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
@@ -88,6 +93,13 @@ body {
     object-fit: scale-down;
 }
 
+.image-thumbnail-small {
+    position: relative;
+    height: 100px;
+    width: auto;
+    object-fit: scale-down;
+}
+
 .ad-price {
     position: absolute;
     bottom: -9px;
@@ -109,11 +121,13 @@ body {
     outline: 1px solid #CCC;
     height: auto;
     overflow: auto;
+    display:flex;
+    justify-content: center;
 }
 
 .image-viewad {
     /*position: relative;*/
-    height: auto;
+    height: 350px;
     width: auto;
     float: right;
     object-fit: scale-down;
@@ -205,4 +219,10 @@ body {
 
 .padding-top {
     padding-top: 24px;
+}
+
+.img-preview {
+    height: 300px;
+    margin: 10px;
+    
 }

@@ -1,7 +1,93 @@
-﻿@{
+﻿@model ProfileViewModel;
+
+@{
     ViewBag.Title = "Profile";
 }
 
-<h1>Profile:</h1>
+<h2>Profile: @User.Identity.Name</h2>
 
-<h2> @User.Identity.Name </h2>
+
+<div class="card mb-3">
+    <div class="card-header">
+        Advertisements
+    </div>
+    <div class="card-body">
+        @if (Model.Advertisements.Any())
+        {
+            @foreach (var advertisement in Model.Advertisements)
+            {
+                <div class="row">
+
+                    <div class="col-lg-2 col-6">
+                        <img class="image-thumbnail-small" src="\Images\3a0d18d9-6a80-4472-b040-baa7be7acb3eb79c27b8-a296-4c85-8baf-a2f08940f0e3_S_7.2_360_13.jpg"> </img>
+                    </div>
+                    <div class="col-lg-3 col-6">
+                        <h5 class="card-title">@advertisement.Brand.Name @advertisement.Model.Name @advertisement.ProductionYear</h5>
+                        <ul>
+                            <li> Price: @advertisement.Price EUR</li>
+                            <li> Mileage: @advertisement.Mileage Km</li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-4 offset-lg-3 col-12 fucking-button-profile-ad ad-nav">
+                        <button>View 👀</button>
+                        <button>Edit ⚙️</button>
+                        <button>Delete ❌</button>
+                    </div>
+                </div>
+                <hr />
+            }
+            <h3> Total advertisements: @Model.Advertisements.Count </h3>
+        }
+        else
+        {
+            <p> No Advertisements to show!</p>
+        }
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header">
+        Search Filters
+    </div>
+    <div class="card-body">
+        @if (Model.Advertisements.Any())
+        {
+            @foreach (var searchFilter in Model.UserSearchFilters)
+            {
+                <div class="row">
+                    <div class="col">
+                        <h5 class="card-title">@searchFilter.FilterName</h5>
+                        <p> Created at:  @searchFilter.CreateTime</p> 
+                    </div>
+                    <div class="col fucking-button-profile-ad ad-nav">
+                        <button>Search using filter 🔍</button>
+                        <button>Delete ❌</button>
+                    </div>
+                </div>
+                <hr />
+            }
+            <h3> Total filters: @Model.UserSearchFilters.Count </h3>
+        }
+        else
+        {
+            <p> No Advertisements to show!</p>
+        }
+    </div>
+</div>
+
+
+@*    <div class="card">
+    <div class="card-header">
+    No users created yet
+    </div>
+    <div class="card-body">
+    <h5 class="card-title">
+    Use the button below to create a user
+    </h5>
+    <a class="btn btn-primary" style="width:auto"
+    asp-controller="Account" asp-action="Register">
+    Add new user
+    </a>
+    </div>
+    </div>
+*@
