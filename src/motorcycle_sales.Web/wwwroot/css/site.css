@@ -58,6 +58,26 @@ button.accept-policy {
 
 /* Sticky footer styles
 -------------------------------------------------- */
+
+@font-face {
+    font-family: Montserrat;
+    font-weight: 400;
+    src: url(".../fonts/Montserrat-Regular.eot?") format("eot"),url("../fonts/Montserrat-Regular.woff") format("woff"),url("../fonts/Montserrat-Regular.ttf") format("truetype"),url("../fonts/Montserrat-Regular.svg#Montserrat") format("svg")
+}
+
+@font-face {
+    font-family: Montserrat;
+    font-weight: 700;
+    src: url("../fonts/Montserrat-Bold.eot?") format("eot"),url("../fonts/Montserrat-Bold.woff") format("woff"),url("../fonts/Montserrat-Bold.ttf") format("truetype"),url("../fonts/Montserrat-Bold.svg#Montserrat") format("svg")
+}
+
+html, body {
+    font-family: Montserrat,sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    z-index: 10
+}
+
 html {
   position: relative;
   min-height: 100%;
@@ -74,6 +94,21 @@ body {
   white-space: nowrap;
   line-height: 60px; /* Vertically center the text there */
 }
+
+div.navbar {
+    font-size: 20px;
+    text-transform: uppercase;
+/*    font-weight: bolder;*/
+}
+
+.card:hover{
+    margin-top: -7px;
+}
+
+.card {
+    transition: all 0.3s ease-in-out;
+}
+
 
 .cover {
     object-fit: contain;
@@ -145,8 +180,8 @@ body {
 .ad-nav button {
     align-items: center;
     appearance: none;
-    background-color: #fff;
-    border-radius: 24px;
+    background-color: #e3f2fd;
+    border-radius: 5px;
     border-style: none;
     box-shadow: rgba(0, 0, 0, .2) 0 3px 5px -1px,rgba(0, 0, 0, .14) 0 6px 10px 0,rgba(0, 0, 0, .12) 0 1px 18px 0;
     box-sizing: border-box;
@@ -225,4 +260,53 @@ body {
     height: 300px;
     margin: 10px;
     
+}
+
+.nav-link a{
+    background-color: green;
+}
+
+.no-decor {
+    text-decoration: none;
+}
+
+footer {
+    /*position: fixed;*/
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    /* Height of the footer*/
+
+}
+
+.login  {
+    margin-top: 40px;
+}
+
+.login label {
+    margin-bottom: 2px;
+    font-size: 20px;
+}
+
+.login input {
+    margin-bottom: 10px;
+    font-size: 20px;
+}
+
+.login input[type = checkbox]{
+    transform: scale(2);
+    margin: 5px;
+    margin-bottom: 15px;
+}
+
+.login button {
+    width: 100%;
+    height: 50px;
+    margin: 5px;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+}
+
+.login div {
+    border: 2px;
 }

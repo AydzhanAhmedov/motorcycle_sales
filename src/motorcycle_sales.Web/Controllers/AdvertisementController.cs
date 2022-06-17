@@ -1,9 +1,11 @@
 ﻿using System.Globalization;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using motorcycle_sales.Core;
+using motorcycle_sales.Core.Entities;
 using motorcycle_sales.Core.Entities.AdvertisementAggregate;
 using motorcycle_sales.Core.Interfaces;
 using motorcycle_sales.Core.ProjectAggregate.Events;
@@ -25,6 +27,7 @@ public class AdvertisementController : Controller
     private readonly IRepository<UserSearchFilter> _userSearchFilteRepository;
     private readonly IHostingEnvironment _hostingEnvironment;
     private readonly ILogger<AdvertisementController> _logger;
+    private readonly UserManager<ApplicationUser> _userManager;
 
     public AdvertisementController(IAdvertisementService advertisementService
         , IReadRepository<Model> modelRepository
@@ -33,7 +36,8 @@ public class AdvertisementController : Controller
         , IRepository<UserSearchFilter> userSearchFilterRepository
         , IHostingEnvironment hostingEnvironment
         , ILogger<AdvertisementController> logger
-        , IUserSearchFilterService userSearchFilterService)
+        , IUserSearchFilterService userSearchFilterService
+        , UserManager<ApplicationUser> userManager)
     {
         _advertisementService = advertisementService;
         _brandRepository = brandRepository;
@@ -42,6 +46,7 @@ public class AdvertisementController : Controller
         _userSearchFilteRepository = userSearchFilterRepository;
         _hostingEnvironment = hostingEnvironment;
         _logger = logger;
+        _userManager = userManager;
     }
 
     [Authorize]
@@ -94,7 +99,6 @@ public class AdvertisementController : Controller
         // TODO replace with mapper
         Advertisement advertisement = new Advertisement()
         {
-            Name = createAdvertisementModel.Name,
             ModelId = createAdvertisementModel.ModelId,
             BrandId = createAdvertisementModel.BrandId,
             Modification = createAdvertisementModel.Modification,
@@ -103,6 +107,7 @@ public class AdvertisementController : Controller
             EngineCapacity = createAdvertisementModel.EngineCapacity,
             TransmissionType = createAdvertisementModel.TransmissionType,
             CoolingSystemType = createAdvertisementModel.CoolingSystemType,
+            Category = createAdvertisementModel.Category,
             ProductionYear = createAdvertisementModel.ProductionYear,
             ProductionMonth = createAdvertisementModel.Month,
             Price = createAdvertisementModel.Price,
@@ -116,7 +121,6 @@ public class AdvertisementController : Controller
         _logger.LogDebug("Inserting new advertisement");
 
         UserSearchFilterSpecification x = new UserSearchFilterSpecification(advertisement);
-        var filters = await _userSearchFilteRepository.ListAsync(x);
 
         // Add event for email notification
         advertisement.Events.Add(new NewAdvertisementCreatedEvent(advertisement));
@@ -146,6 +150,9 @@ public class AdvertisementController : Controller
     {
         var advertisementByIdSpec = new AdvertisementWithDetailsSpecification(id);
         var advertisement = await _advertisementRepository.GetBySpecAsync(advertisementByIdSpec);
+
+        if (advertisement == null)
+            return NotFound();
 
         return View(advertisement);
     }
@@ -199,5 +206,56 @@ public class AdvertisementController : Controller
         _userSearchFilteRepository.AddAsync(userSearchFilter);
 
         return Ok();
+    }
+
+    public async Task<IActionResult> AddAdvertisementToFavorite(int advertisementId, bool add)
+    {
+        var advertisement = await _advertisementRepository.GetByIdAsync(advertisementId);
+        var user = await _userManager.GetUserAsync(HttpContext.User);
+
+        if (add)
+        {
+            if (user.FavoriteAdvertisements.FindIndex(ad => ad.Id == advertisementId) == -1)
+                user.FavoriteAdvertisements.Add(advertisement);
+        }
+        else
+        {
+            int index = user.FavoriteAdvertisements.FindIndex(ad => ad.Id == advertisementId);
+            if (index != -1)
+                user.FavoriteAdvertisements.RemoveAt(index);
+        }
+
+        var result = await _userManager.UpdateAsync(user);
+        if (!result.Succeeded)
+            return BadRequest();
+
+        return Ok();
+    }
+
+    [AllowAnonymous]
+    public async Task<JsonResult> IsFavorite(int advertisementId)
+    {
+        var user = await _userManager.GetUserAsync(HttpContext.User);
+
+        // If no user is logged in
+        if (user == null)
+            return Json(false);
+
+        int index = user.FavoriteAdvertisements.FindIndex(ad => ad.Id == advertisementId);
+        bool found = index != -1;
+
+        return Json(found);
+    }
+
+    [HttpGet]
+    public async Task<ActionResult> Favorites()
+    {
+        var user = await _userManager.GetUserAsync(HttpContext.User);
+        if (user == null)
+            return NotFound();
+
+        // TODO for optimize
+        List<Advertisement> advertisements = user.FavoriteAdvertisements;
+        return View(advertisements);
     }
 }

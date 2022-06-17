@@ -2,19 +2,20 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using motorcycle_sales.Core.Entities;
 using motorcycle_sales.Core.Interfaces;
 using motorcycle_sales.Web.ViewModels;
 
 namespace motorcycle_sales.Web.Controllers;
 public class AccountController : Controller
 {
-    private readonly SignInManager<IdentityUser> _signInManager;
-    private readonly UserManager<IdentityUser> _userManager;
+    private readonly SignInManager<ApplicationUser> _signInManager;
+    private readonly UserManager<ApplicationUser> _userManager;
     private readonly IAdvertisementService _advertisementService;
     private readonly IUserSearchFilterService _userSearchFilterService;
 
-    public AccountController(SignInManager<IdentityUser> signInManager
-        , UserManager<IdentityUser> userManager
+    public AccountController(SignInManager<ApplicationUser> signInManager
+        , UserManager<ApplicationUser> userManager
         , IAdvertisementService advertisementService
         , IUserSearchFilterService userSearchFilterService)
     {
@@ -64,7 +65,7 @@ public class AccountController : Controller
         if (!ModelState.IsValid)
             return View(model);
 
-        var identityUser = new IdentityUser
+        var identityUser = new ApplicationUser
         {
             UserName = model.Email,
             Email = model.Email

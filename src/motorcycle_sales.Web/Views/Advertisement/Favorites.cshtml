@@ -1,0 +1,95 @@
+﻿@model IEnumerable<Advertisement>
+
+@{
+    ViewData["Title"] = "Favorites";
+}
+
+<h1> Favorites </h1>
+<hr />
+@if (Model.Any())
+{
+    @foreach (var advertisement in Model)
+    {
+        var photoPath = "/Images/" + (advertisement.PhotoPath ?? "noimage.jpg");
+        <div class="row">
+
+            <div class="col-lg-2 col-6">
+
+                <img class="image-thumbnail-small" src="@photoPath"> </img>
+            </div>
+            <div class="col-lg-3 col-6">
+                <h5 class="card-title">@advertisement.Brand.Name @advertisement.Model.Name</h5>
+                <ul>
+                    <li> Price: @advertisement.Price EUR</li>
+                    <li> Mileage: @advertisement.Mileage Km</li>
+                </ul>
+            </div>
+            <div class="col-lg-4 offset-lg-3 col-12 fucking-button-profile-ad ad-nav">
+                <a class="no-decor" asp-action="view" asp-controller="advertisement" asp-route-id="@advertisement.Id">
+                    <button>View 👀</button>
+                </a>
+
+                <button onclick="AddToFavorites(@advertisement.Id, true)" id="FavoriteThis-@advertisement.Id" style="display:none;">Favorite This ❤️</button>
+                <button onclick="AddToFavorites(@advertisement.Id, false)" id="Unfavorite-@advertisement.Id">Unfavorite 💔</button>
+            </div>
+        </div>
+        <hr />
+    }
+}
+else
+{
+    <p> You dont have any favorite advertisements</p>
+}
+
+@section Scripts
+{
+    <script>
+    function AddToFavorites(id, toAdd) {
+    	console.log(toAdd)
+    	$.ajax({
+    		type: "POST",
+    		url: '@Url.Action("AddAdvertisementToFavorite")',
+    		data: {
+    			advertisementid: id,
+    			add: toAdd
+    		},
+    		success: function(response) {
+    			UpdateFavoriteButton(id);
+    		},
+    		failure: function(response) {
+    			alert(response.responseText);
+    		},
+    		error: function(response) {
+    			alert(response.responseText);
+    		}
+    	});
+    }
+
+    function UpdateFavoriteButton(id) {
+
+    	$.ajax({
+    		type: 'GET',
+    		url: '@Url.Action("IsFavorite")',
+    		dataType: 'json',
+    		data: {
+    			advertisementId: id
+    		},
+    		success: function(mems) {
+    			console.log(mems)
+    			if (mems == true) {
+    				$("#FavoriteThis-" + id).hide();
+    				$("#Unfavorite-" + id).show();
+    			} else {
+    				console.log($("#FavoriteThis" + id))
+    				$("#FavoriteThis-" + id).show();
+    				$("#Unfavorite-" + id).hide();
+    			}
+    		},
+    		error: function(ex) {
+    			console.log("error")
+    			alert('Failed to retrieve models.' + ex);
+    		}
+    	});
+    }
+    </script>
+}

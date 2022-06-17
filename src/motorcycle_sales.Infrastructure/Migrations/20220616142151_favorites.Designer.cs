@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using motorcycle_sales.Infrastructure.Data;
 
@@ -11,9 +12,10 @@ using motorcycle_sales.Infrastructure.Data;
 namespace motorcycle_sales.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220616142151_favorites")]
+    partial class favorites
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -181,9 +183,6 @@ namespace motorcycle_sales.Infrastructure.Migrations
                     b.Property<int>("BrandId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Category")
-                        .HasColumnType("int");
-
                     b.Property<int>("CoolingSystemType")
                         .HasColumnType("int");
 
@@ -209,6 +208,10 @@ namespace motorcycle_sales.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Modification")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhotoPath")
@@ -248,9 +251,6 @@ namespace motorcycle_sales.Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int?>("BrandId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("Category")
                         .HasColumnType("int");
 
                     b.Property<int?>("CoolingSystemType")

@@ -6,10 +6,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using motorcycle_sales.Core.Entities.AdvertisementAggregate;
+using motorcycle_sales.Core.Entities;
 
 namespace motorcycle_sales.Infrastructure.Data;
 
-public class AppDbContext : IdentityDbContext<IdentityUser>
+public class AppDbContext : IdentityDbContext<ApplicationUser>
 {
     private readonly IMediator? _mediator;
 
@@ -36,6 +37,17 @@ public class AppDbContext : IdentityDbContext<IdentityUser>
 
         modelBuilder.ApplyAllConfigurationsFromCurrentAssembly();
 
+        modelBuilder.Entity<ApplicationUser>()
+            .HasMany(user => user.FavoriteAdvertisements)
+            .WithMany(ad => ad.FavoritedFromUsers);
+
+        modelBuilder.Entity<ApplicationUser>().Navigation(e => e.FavoriteAdvertisements).AutoInclude();
+
+        modelBuilder.Entity<Advertisement>().Navigation(e => e.Brand).AutoInclude();
+        modelBuilder.Entity<Advertisement>().Navigation(e => e.Model).AutoInclude();
+
+
+        // modelBuilder.Entity<Advertisement>().Navigation(e => e.FavoritedFromUsers).AutoInclude();
 
         //modelBuilder.Entity<Advertisement>()
         //    .HasOne(ad => ad.Model)
@@ -46,7 +58,7 @@ public class AppDbContext : IdentityDbContext<IdentityUser>
         //    .HasOne(ad => ad.Brand)
         //    .WithMany()
         //    .HasForeignKey(ad => ad.BrandId);
-            
+
 
         // alternately this is built-in to EF Core 2.2
         //modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

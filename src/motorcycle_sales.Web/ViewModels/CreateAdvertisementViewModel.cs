@@ -7,11 +7,6 @@ namespace motorcycle_sales.Web.ViewModels;
 
 public class CreateAdvertisementViewModel
 {
-    // Input data
-
-    [DisplayName("Name")]
-    public string Name { get; set; }
-
     [Required]
     [Range(1, int.MaxValue, ErrorMessage = "Select model")]
     [DisplayName("Model")]
@@ -35,6 +30,7 @@ public class CreateAdvertisementViewModel
     public TransmissionType TransmissionType { get; set; }
     [DisplayName("Cooling System")]
     public CoolingSystemType CoolingSystemType { get; set; }
+    public Category Category { get; set; }
     public double Price { get; set; }
     public int Mileage { get; set; }
     public string Description { get; set; }

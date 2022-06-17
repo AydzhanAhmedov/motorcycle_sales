@@ -8,6 +8,7 @@ using motorcycle_sales.Web;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Identity;
 using motorcycle_sales.Core.Interfaces;
+using motorcycle_sales.Core.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,7 +25,7 @@ string connectionString = builder.Configuration.GetConnectionString("DefaultConn
 builder.Services.AddDbContext(connectionString);
 builder.Services.AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));
 
-builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>();
 
 builder.Services.AddControllersWithViews().AddNewtonsoftJson();

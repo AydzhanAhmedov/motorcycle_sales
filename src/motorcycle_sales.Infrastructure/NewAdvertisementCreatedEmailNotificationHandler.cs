@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text.Encodings.Web;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using motorcycle_sales.Core.Entities;
 using motorcycle_sales.Core.Entities.AdvertisementAggregate;
 using motorcycle_sales.Core.Interfaces;
 using motorcycle_sales.Core.ProjectAggregate.Events;
@@ -15,13 +16,13 @@ public class NewAdvertisementCreatedEmailNotificationHandler : INotificationHand
     private readonly IEmailSender _emailSender;
     private readonly IUserSearchFilterService _userSearchFilterService;
     private readonly IAppLogger<NewAdvertisementCreatedEmailNotificationHandler> _logger;
-    private readonly UserManager<IdentityUser> _userManager;
+    private readonly UserManager<ApplicationUser> _userManager;
     private readonly IRepository<Advertisement> _advertisementRepository;
 
     public NewAdvertisementCreatedEmailNotificationHandler(IEmailSender emailSender
         , IUserSearchFilterService userSearchFilterService
         , IAppLogger<NewAdvertisementCreatedEmailNotificationHandler> logger
-        , UserManager<IdentityUser> userManager
+        , UserManager<ApplicationUser> userManager
         , IRepository<Advertisement> advertisementRepository
         )
     {

@@ -4,6 +4,7 @@
     ViewBag.Title = "Profile";
 }
 
+
 <h2>Profile: @User.Identity.Name</h2>
 
 
@@ -16,20 +17,25 @@
         {
             @foreach (var advertisement in Model.Advertisements)
             {
+                var photoPath = "/Images/" + (advertisement.PhotoPath ?? "noimage.jpg");
                 <div class="row">
 
                     <div class="col-lg-2 col-6">
-                        <img class="image-thumbnail-small" src="\Images\3a0d18d9-6a80-4472-b040-baa7be7acb3eb79c27b8-a296-4c85-8baf-a2f08940f0e3_S_7.2_360_13.jpg"> </img>
+
+                        <img class="image-thumbnail-small" src="@photoPath"> </img>
                     </div>
                     <div class="col-lg-3 col-6">
-                        <h5 class="card-title">@advertisement.Brand.Name @advertisement.Model.Name @advertisement.ProductionYear</h5>
-                        <ul>
-                            <li> Price: @advertisement.Price EUR</li>
-                            <li> Mileage: @advertisement.Mileage Km</li>
+                        <h5 class="card-title">@advertisement.Brand.Name @advertisement.Model.Name</h5>
+                        <ul style="list-style-type:none">
+                            <li> <i class="fa-solid fa-tag"></i> Price: @advertisement.Price EUR</li>
+                            <li> <i class="fa-solid fa-road"></i> Mileage: @advertisement.Mileage Km</li>
                         </ul>
                     </div>
                     <div class="col-lg-4 offset-lg-3 col-12 fucking-button-profile-ad ad-nav">
-                        <button>View 👀</button>
+                        <a class="no-decor" asp-action="view" asp-controller="advertisement" asp-route-id="@advertisement.Id">
+                            <button>View 👀</button>
+                        </a>
+
                         <button>Edit ⚙️</button>
                         <button>Delete ❌</button>
                     </div>
@@ -57,11 +63,19 @@
                 <div class="row">
                     <div class="col">
                         <h5 class="card-title">@searchFilter.FilterName</h5>
-                        <p> Created at:  @searchFilter.CreateTime</p> 
+                        <p> Created at:  @searchFilter.CreateTime</p>
                     </div>
-                    <div class="col fucking-button-profile-ad ad-nav">
-                        <button>Search using filter 🔍</button>
-                        <button>Delete ❌</button>
+                    <div class="col fucking-button-profile-ad ad-nav" style="display: flex;">
+                        <div class="col-md-4 form-switch" style="align-self: center;">
+                            <input  onclick="SwitchEmailNotifications(@searchFilter.Id)" asp-for="@searchFilter.NotificationsActive" class="form-check-input" type="checkbox" role="switch" id="emailNotifications-@searchFilter.Id">
+                            <label  class="form-check-label" for="emailNotifications-@searchFilter.Id">E-mail Notifications</label>
+                        </div>
+                        <div class="col-md-8">
+
+                            <button>Search using filter 🔍</button>
+                            <button>Delete ❌</button>
+
+                        </div>
                     </div>
                 </div>
                 <hr />
@@ -76,18 +90,45 @@
 </div>
 
 
-@*    <div class="card">
-    <div class="card-header">
-    No users created yet
-    </div>
-    <div class="card-body">
-    <h5 class="card-title">
-    Use the button below to create a user
-    </h5>
-    <a class="btn btn-primary" style="width:auto"
-    asp-controller="Account" asp-action="Register">
-    Add new user
-    </a>
-    </div>
-    </div>
-*@
+    <script>
+    function SwitchEmailNotifications(id) {
+        console.log($("#emailNotifications-"+id).attr('checked'))
+        let toActivate = $("#emailNotifications-"+id).attr('checked') === undefined
+    	$.ajax({
+    		type: "POST",
+    		url: '@Url.Action("SwitchFilterNotifications", "SearchFilter")',
+    		data: {
+    			userSearchFilterId: id
+    		},
+    		success: function(response) {
+    			UpdateEmailNotificationsSwitch(id);
+    		},
+    		failure: function(response) {
+    			alert(response.responseText);
+    		},
+    		error: function(response) {
+    			alert(response.responseText);
+    		}
+    	});
+    }
+
+    function UpdateEmailNotificationsSwitch(id) {
+
+    	$.ajax({
+    		type: 'GET',
+    		url: '@Url.Action("IsFilterNotificationsActive", "SearchFilter")',
+    		dataType: 'json',
+    		data: {
+    			userSearchFilterId: id
+    		},
+    		success: function(mems) {
+    			console.log(mems)
+    				$("#emailNotifications-" + id).prop('checked', mems); 
+    		},
+    		error: function(ex) {
+    			console.log("error")
+    			alert('Failed to retrieve models.' + ex);
+    		}
+    	});
+    }
+    </script>

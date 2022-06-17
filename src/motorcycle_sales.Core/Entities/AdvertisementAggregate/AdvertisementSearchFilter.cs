@@ -14,6 +14,7 @@ public class AdvertisementSearchFilter : BaseEntity
     public EngineType? EngineType { get; set; }
     public TransmissionType? TransmissionType { get; set; }
     public CoolingSystemType? CoolingSystemType { get; set; }
+    public Category? Category { get; set; }
     public double? PriceFrom { get; set; }
     public double? PriceTo { get; set; }
     public int? ProductionYearFrom { get; set; }
