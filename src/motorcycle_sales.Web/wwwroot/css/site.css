@@ -84,19 +84,22 @@ html {
 }
 
 body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
-}
-.footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  white-space: nowrap;
-  line-height: 60px; /* Vertically center the text there */
+    /* Margin bottom by footer height */
+    /* margin-bottom: 60px;*/
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
+/*footer {
+    position: fixed;
+    bottom: 0;
+}*/
+
+
 div.navbar {
-    font-size: 20px;
+    font-size: 16px;
     text-transform: uppercase;
 /*    font-weight: bolder;*/
 }
@@ -270,14 +273,6 @@ div.navbar {
     text-decoration: none;
 }
 
-footer {
-    /*position: fixed;*/
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    /* Height of the footer*/
-
-}
 
 .login  {
     margin-top: 40px;
@@ -310,3 +305,14 @@ footer {
 .login div {
     border: 2px;
 }
+
+.sidebar {
+
+    padding: 15px;
+
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    height: 90vh;
+}
+

@@ -225,6 +225,7 @@ public class AdvertisementController : Controller
                 user.FavoriteAdvertisements.RemoveAt(index);
         }
 
+        await _advertisementRepository.SaveChangesAsync();
         var result = await _userManager.UpdateAsync(user);
         if (!result.Succeeded)
             return BadRequest();
