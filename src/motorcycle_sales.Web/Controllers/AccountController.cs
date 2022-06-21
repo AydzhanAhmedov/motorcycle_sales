@@ -68,10 +68,12 @@ public class AccountController : Controller
         var identityUser = new ApplicationUser
         {
             UserName = model.Email,
-            Email = model.Email
+            Email = model.Email,
+            PhoneNumber = model.PhoneNumber
         };
 
         var result = await _userManager.CreateAsync(identityUser, model.Password);
+
 
         if (result.Succeeded)
         {
