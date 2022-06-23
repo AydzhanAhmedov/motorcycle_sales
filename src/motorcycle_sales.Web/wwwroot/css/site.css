@@ -104,11 +104,11 @@ div.navbar {
 /*    font-weight: bolder;*/
 }
 
-.card:hover{
+.motorcard:hover{
     margin-top: -7px;
 }
 
-.card {
+.motorcard {
     transition: all 0.3s ease-in-out;
 }
 
@@ -316,3 +316,6 @@ div.navbar {
     height: 90vh;
 }
 
+.text-align-end {
+    text-align: end;
+}
