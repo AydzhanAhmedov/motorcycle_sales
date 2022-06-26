@@ -49,7 +49,6 @@ public class AdvertisementController : Controller
         _userManager = userManager;
     }
 
-    [Authorize]
     public async Task<IActionResult> Create()
     {
         CreateAdvertisementViewModel createAdvertisementModel = new CreateAdvertisementViewModel();

@@ -4,8 +4,6 @@
             <span class="fs-5 d-none d-sm-inline">Admin Menu</span>
         </a>
         <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
-
-
             <li>
                 <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
                     <i class="fs-4 bi-people"></i><span class="ms-1 d-none d-sm-inline">User Managament</span>
@@ -13,12 +11,12 @@
                 <ul class="collapse show nav flex-column ms-1" id="submenu1" data-bs-parent="#menu">
                     <li class="w-100">
                         <a asp-controller="administration" asp-action="listRoles" class="nav-link align-middle px-0">
-                            <span class="ms-1 d-none d-sm-inline">Roles</span>
+                            <i class="fa-solid fa-circle-dot"></i> <span class="ms-1 d-none d-sm-inline">Roles</span>
                         </a>
                     </li>
                     <li class="w-100">
-                        <a href="#" class="nav-link px-0 align-middle">
-                            <span class="ms-1 d-none d-sm-inline">Users</span>
+                        <a asp-controller="administration" asp-action="listUsers" class="nav-link align-middle px-0">
+                            <i class="fa-solid fa-circle-dot"></i> <span class="ms-1 d-none d-sm-inline">Users</span>
                         </a>
                     </li>
                 </ul>

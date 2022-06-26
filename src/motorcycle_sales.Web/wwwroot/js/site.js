@@ -42,3 +42,22 @@ jQueryAjaxPost = form => {
     // prevent default form submit evvent
     return false;
 };
+
+confirmDelete = (url, body) => {
+    console.log(url);
+
+    $("#form-modal-confirm .modal-body").html(body);
+    $("#form-modal-confirm-button").click(function () {
+        $.ajax({
+            type: "POST",
+            url: url,
+            success: function (res) {
+                window.location.reload()
+            },
+            error: function (err) {
+                window.alert(err);
+            }
+        })
+    })
+    $("#form-modal-confirm").modal('show');
+};

@@ -1,13 +1,14 @@
-﻿@model CreateRoleViewModel
+﻿@model AddOrEditRoleViewModel
 
 @{
     ViewBag.Title = "Create New Role";
     Layout = null;
 }
 
-<form asp-action="CreateRole" method="post" onsubmit="return jQueryAjaxPost(this)">
+<form asp-action="AddOrEditRole" method="post" onsubmit="return jQueryAjaxPost(this)">
     <div asp-validation-summary="All" class="text-danger">
     </div>
+    <input asp-for="RoleId" type="hidden"/>
     <div class="row">
         <div class="col gap-3">
             <div class="form-group" style="padding-bottom:10px;">
@@ -17,7 +18,7 @@
             </div>
             <div class="form-group text-align-end">
                 <button type="submit" class="btn btn-primary" style="width:auto">
-                    Create Role
+                    Save
                 </button>
             </div>
         </div>

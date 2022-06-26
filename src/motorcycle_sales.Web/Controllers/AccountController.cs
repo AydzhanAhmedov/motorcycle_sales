@@ -27,6 +27,13 @@ public class AccountController : Controller
 
     [HttpGet]
     [AllowAnonymous]
+    public IActionResult AccessDenied()
+    {
+        return View();
+    }
+
+    [HttpGet]
+    [AllowAnonymous]
     public IActionResult Login()
     {
         return View();
