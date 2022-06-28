@@ -11,6 +11,9 @@ showInPopup = (url, title) => {
             $("#form-modal .modal-body").html(res);
             $("#form-modal .modal-title").html(title);
             $("#form-modal").modal('show');
+        },
+        error: function (err) {
+            console.log(err);
         }
     })
 };

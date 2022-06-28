@@ -29,6 +29,7 @@ public class Advertisement : BaseEntity, IAggregateRoot
     public string? PhotoPath { get; set; }
     public string UserId { get; set; }
     public DateTime CreationDate { get; set; }
+    public AdvertisementStatus Status { get; set; }
     // Other side of the many to many relation - advertisement can be favorited from many users
     public virtual List<ApplicationUser> FavoritedFromUsers { get; set; }
 }

@@ -114,7 +114,8 @@ public class AdvertisementController : Controller
             Description = createAdvertisementModel.Description,
             PhotoPath = uniqueFileName,
             UserId = User.FindFirstValue(ClaimTypes.NameIdentifier),
-            CreationDate = DateTime.Now
+            CreationDate = DateTime.Now,
+            Status = AdvertisementStatus.Pending
         };
 
         _logger.LogDebug("Inserting new advertisement");

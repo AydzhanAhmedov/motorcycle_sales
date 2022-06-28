@@ -1,0 +1,59 @@
+﻿@model IEnumerable<ModelViewModel>
+
+@{
+    ViewBag.Title = "All Brands";
+}
+
+<h1>Models</h1>
+<a onclick="showInPopup('@Url.Action("AddOrEditModel","CatalogManage")', 'Add model')" class="btn btn-primary mb-3" style="width:auto">Add new model</a>
+
+<table class="table table-striped" id="userTable">
+    <thead>
+        <tr>
+            <th>
+                Model
+            </th>
+            <th>
+                Brand
+            </th>
+            <th style="width:30%; padding-right: 15px" class="text-align-end">
+                Actions
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var brandModel in Model)
+        {
+            <tr>
+                <td>
+                    <div class="row">
+                        <div class="col-sm">
+                            <a>
+                                @brandModel.ModelName
+                            </a>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <a>
+                        @brandModel.BrandName
+                    </a>
+                </td>
+                <td>
+                    <div class="dropdown text-align-end">
+                        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                            Actions
+                        </a>
+
+                        <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuLink">
+                            <li>
+                                <a class="dropdown-item" href="#" onclick="showInPopup('@Url.Action("AddOrEditModel","CatalogManage", new {modelId = @brandModel.Id}, Context.Request.Scheme)', 'Edit Role')">Edit</a>
+                            </li>
+                            <li><a class="dropdown-item" onclick="confirmDelete('@Url.Action("DeleteModel","CatalogManage", new {modelId = @brandModel.Id}, Context.Request.Scheme)', 'Delete model @brandModel.ModelName')">Delete</a>  </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

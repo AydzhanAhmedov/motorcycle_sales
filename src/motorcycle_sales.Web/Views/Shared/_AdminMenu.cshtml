@@ -11,12 +11,29 @@
                 <ul class="collapse show nav flex-column ms-1" id="submenu1" data-bs-parent="#menu">
                     <li class="w-100">
                         <a asp-controller="administration" asp-action="listRoles" class="nav-link align-middle px-0">
-                            <i class="fa-solid fa-circle-dot"></i> <span class="ms-1 d-none d-sm-inline">Roles</span>
+                           <i class="fa-solid fa-angle-right"></i> <span class="ms-1 d-none d-sm-inline">Roles</span>
                         </a>
                     </li>
                     <li class="w-100">
                         <a asp-controller="administration" asp-action="listUsers" class="nav-link align-middle px-0">
-                            <i class="fa-solid fa-circle-dot"></i> <span class="ms-1 d-none d-sm-inline">Users</span>
+                            <i class="fa-solid fa-angle-right"></i> <span class="ms-1 d-none d-sm-inline">Users</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="#submenu2" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
+                    <i class="fas fa-book fa-lg"></i> <span class="ms-1 d-none d-sm-inline">Catalog</span>
+                </a>
+                <ul class="collapse show nav flex-column ms-1" id="submenu2" data-bs-parent="#menu">
+                    <li class="w-100">
+                        <a asp-controller="catalogManage" asp-action="listBrands" class="nav-link align-middle px-0">
+                           <i class="fa-solid fa-angle-right"></i> <span class="ms-1 d-none d-sm-inline">Brands</span>
+                        </a>
+                    </li>
+                    <li class="w-100">
+                        <a asp-controller="catalogManage" asp-action="listModels" class="nav-link align-middle px-0">
+                            <i class="fa-solid fa-angle-right"></i> <span class="ms-1 d-none d-sm-inline">Models</span>
                         </a>
                     </li>
                 </ul>

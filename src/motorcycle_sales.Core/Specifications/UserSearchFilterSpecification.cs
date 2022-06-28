@@ -10,11 +10,19 @@ namespace motorcycle_sales.Core.Specifications;
 
 public class UserSearchFilterSpecification : Specification<UserSearchFilter>
 {
+    /// <summary>
+    /// User search filters by user id
+    /// </summary>
+    /// <param name="Id">Id of user which filters will be loaded</param>
     public UserSearchFilterSpecification(string Id)
     {
         Query.Where(filter => filter.UserId == Id);
     }
 
+    /// <summary>
+    /// All maching user filters for given advertisement
+    /// </summary>
+    /// <param name="advertisement"> Advertisement for which filters will be searched </param>
     public UserSearchFilterSpecification(Advertisement advertisement)
     {
         // Filter value is null or it is maching the advertisement value

@@ -1,0 +1,59 @@
+﻿@model IEnumerable<BrandViewModel>
+
+@{
+    ViewBag.Title = "All Brands";
+}
+
+<h1>Brands</h1>
+<a onclick="showInPopup('@Url.Action("AddOrEditBrand","CatalogManage")', 'Add brand')" class="btn btn-primary mb-3" style="width:auto">Add new brand</a>
+
+<table class="table table-striped" id="userTable">
+    <thead>
+        <tr>
+            <th>
+                Brand
+            </th>
+            <th>
+                Models Count
+            </th>
+            <th style="width:30%; padding-right: 15px" class="text-align-end">
+                Actions
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var brand in Model)
+        {
+            <tr>
+                <td>
+                    <div class="row">
+                        <div class="col-sm">
+                            <a>
+                                @brand.Name
+                            </a>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <a>
+                        @brand.ModelsCount
+                    </a>
+                </td>
+                <td>
+                    <div class="dropdown text-align-end">
+                        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                            Actions
+                        </a>
+
+                        <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuLink">
+                            <li>
+                                <a class="dropdown-item" href="#" onclick="showInPopup('@Url.Action("AddOrEditBrand","CatalogManage", new {brandId = @brand.Id}, Context.Request.Scheme)', 'Edit Role')">Edit</a>
+                            </li>
+                            <li><a class="dropdown-item" onclick="confirmDelete('@Url.Action("DeleteBrand","CatalogManage", new {brandId = @brand.Id}, Context.Request.Scheme)', 'Delete brand @brand.Name')">Delete</a>  </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
