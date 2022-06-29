@@ -1,4 +1,5 @@
 ﻿@inject SignInManager<ApplicationUser> signInManager;
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -24,7 +25,6 @@
     </environment>
 </head>
 <body>
-
     <div class="row" style="max-width: 100%;">
         @{
             var isAdmin = true;
@@ -33,7 +33,9 @@
 
         @if (isAdmin)
         {
-            @Html.Partial("_AdminMenu");
+            @Html.Partial("_AdminMenu")
+
+            ;
             mainBodyClass = "col-auto col-md-9";
         }
 
@@ -65,9 +67,26 @@
                                 @if (signInManager.IsSignedIn(User))
                                 {
                                     var userID = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                                    <li class="nav-item">
-                                        <a asp-controller="account" asp-action="profile" asp-route-id="@userID" class="nav-link">Profile</a>
-                                    </li>
+
+                                    <div class="dropdown">
+                                        <a class="nav-link" href="" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Profile
+                                        </a>
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                            <li>
+                                                <a class="dropdown-item" asp-controller="account" asp-action="profile" asp-route-userId="@userID">Profile</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" asp-controller="advertisement" asp-action="favorites" asp-route-userId="@userID">Favorites</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" asp-controller="account" asp-action="myadvertisements" asp-route-userId="@userID">My advertisements</a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" asp-controller="account" asp-action="filters" asp-route-userId="@userID">Filters</a>
+                                            </li>
+                                        </ul>
+                                    </div>
 
                                     <li class="nav-item">
                                         <a asp-controller="account" asp-action="logout" class="nav-link">Logout @User.Identity.Name</a>
@@ -90,27 +109,7 @@
             </div>
             <br />
 
-            @*            <div class="modal" tabindex="-1" role="dialog" id="form-modal">
-                <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                <div class="modal-header">
-                <h5 class="modal-title"></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
-                </div>
-                <div class="modal-body">
-
-                </div>
-                <div class="modal-footer">
-                <button type="button" class="btn btn-primary">Save changes</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
-                </div>
-                </div>
-                </div>*@
-
-            <div class="modal fade" id="form-modal" tabindex="-1" aria-labelledby="exampleModalLabel"  aria-hidden="true">
+            <div class="modal fade" id="form-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -123,23 +122,22 @@
                 </div>
             </div>
 
-                        <div class="modal fade" id="form-modal-confirm" tabindex="-1" aria-labelledby="modal-confirm-label" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Confirm</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal fade" id="form-modal-confirm" tabindex="-1" aria-labelledby="modal-confirm-label" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Confirm</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-primary" id="form-modal-confirm-button">Confirm</button>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="modal-body">
-               
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" id="form-modal-confirm-button">Confirm</button>
-            </div>
-        </div>
-    </div>
-</div>
 
             <div class="container body-content">
                 @RenderBody()

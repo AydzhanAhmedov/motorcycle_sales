@@ -1,0 +1,44 @@
+﻿@model IEnumerable<Advertisement>
+
+<div class="card mb-3">
+    <div class="card-header">
+        Advertisements
+    </div>
+    <div class="card-body">
+        @if (Model.Any())
+        {
+            @foreach (var advertisement in Model)
+            {
+                var photoPath = "/Images/" + (advertisement.PhotoPath ?? "noimage.jpg");
+                <div class="row">
+
+                    <div class="col-lg-2 col-6">
+
+                        <img class="image-thumbnail-small" src="@photoPath"> </img>
+                    </div>
+                    <div class="col-lg-3 col-6">
+                        <h5 class="card-title">@advertisement.Brand.Name @advertisement.Model.Name</h5>
+                        <ul style="list-style-type:none">
+                            <li> <i class="fa-solid fa-tag"></i> Price: @advertisement.Price EUR</li>
+                            <li> <i class="fa-solid fa-road"></i> Mileage: @advertisement.Mileage Km</li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-4 offset-lg-3 col-12 fucking-button-profile-ad ad-nav">
+                        <a class="no-decor" asp-action="view" asp-controller="advertisement" asp-route-id="@advertisement.Id">
+                            <button>View 👀</button>
+                        </a>
+
+                        <button>Edit ⚙️</button>
+                        <button>Delete ❌</button>
+                    </div>
+                </div>
+                <hr />
+            }
+            <h3> Total advertisements: @Model.Count() </h3>
+        }
+        else
+        {
+            <p> No Advertisements to show!</p>
+        }
+    </div>
+</div>

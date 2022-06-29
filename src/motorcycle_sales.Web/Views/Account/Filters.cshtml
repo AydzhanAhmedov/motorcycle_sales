@@ -1,0 +1,83 @@
+﻿@model IEnumerable<UserSearchFilter>
+
+<div class="card mb-3">
+    <div class="card-header">
+        Search Filters
+    </div>
+    <div class="card-body">
+        @if (Model.Any())
+        {
+            @foreach (var searchFilter in Model)
+            {
+                <div class="row">
+                    <div class="col">
+                        <h5 class="card-title">@searchFilter.FilterName</h5>
+                        <p> Created at:  @searchFilter.CreateTime</p>
+                    </div>
+                    <div class="col fucking-button-profile-ad ad-nav" style="display: flex;">
+                        <div class="col-md-4 form-switch" style="align-self: center;">
+                            <input onclick="SwitchEmailNotifications(@searchFilter.Id)" asp-for="@searchFilter.NotificationsActive" class="form-check-input" type="checkbox" role="switch" id="emailNotifications-@searchFilter.Id">
+                            <label class="form-check-label" for="emailNotifications-@searchFilter.Id">E-mail Notifications</label>
+                        </div>
+                        <div class="col-md-8">
+
+                            <button>Search using filter 🔍</button>
+                            <button>Delete ❌</button>
+
+                        </div>
+                    </div>
+                </div>
+                <hr />
+            }
+            <h3> Total filters: @Model.Count() </h3>
+        }
+        else
+        {
+            <p> No Advertisements to show!</p>
+        }
+    </div>
+</div>
+
+
+<script>
+    function SwitchEmailNotifications(id) {
+        console.log($("#emailNotifications-"+id).attr('checked'))
+        let toActivate = $("#emailNotifications-"+id).attr('checked') === undefined
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SwitchFilterNotifications", "SearchFilter")',
+            data: {
+                userSearchFilterId: id
+            },
+            success: function(response) {
+                UpdateEmailNotificationsSwitch(id);
+            },
+            failure: function(response) {
+                alert(response.responseText);
+            },
+            error: function(response) {
+                alert(response.responseText);
+            }
+        });
+    }
+
+    function UpdateEmailNotificationsSwitch(id) {
+
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("IsFilterNotificationsActive", "SearchFilter")',
+            dataType: 'json',
+            data: {
+                userSearchFilterId: id
+            },
+            success: function(mems) {
+                console.log(mems)
+                    $("#emailNotifications-" + id).prop('checked', mems);
+            },
+            error: function(ex) {
+                console.log("error")
+                alert('Failed to retrieve models.' + ex);
+            }
+        });
+    }
+</script>

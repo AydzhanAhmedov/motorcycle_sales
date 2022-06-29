@@ -104,30 +104,67 @@ public class AccountController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> Profile(string Id)
+    public async Task<IActionResult> Profile(string userId)
     {
-        var test = ClaimTypes.NameIdentifier;
         var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-        if (Id == null)
+        if (userId == null)
         {
             return NotFound();
         }
 
         // Check if user is looking at own profile
-        if (Id != currentUserId)
+        if (userId != currentUserId)
         {
             return BadRequest();
         }
 
         var profileViewModel = new ProfileViewModel();
 
-        profileViewModel.Advertisements = await _advertisementService.GetAdvertisementsByUserId(Id);
-        profileViewModel.UserSearchFilters = await _userSearchFilterService.GetUserSearchFiltersByUserId(Id);
         profileViewModel.User = await _userManager.GetUserAsync(HttpContext.User);
 
-
-
         return View(profileViewModel);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> MyAdvertisements(string userId)
+    {
+        var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        if (userId == null)
+        {
+            return NotFound();
+        }
+
+        // Check if user is looking at own profile
+        if (userId != currentUserId)
+        {
+            return BadRequest();
+        }
+
+        var model = (await _advertisementService.GetAdvertisementsByUserId(userId)).Value;
+
+        return View(model);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Filters(string userId)
+    {
+        var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        if (userId == null)
+        {
+            return NotFound();
+        }
+
+        // Check if user is looking at own profile
+        if (userId != currentUserId)
+        {
+            return BadRequest();
+        }
+
+        var model = (await _userSearchFilterService.GetUserSearchFiltersByUserId(userId)).Value;
+
+        return View(model);
     }
 }
