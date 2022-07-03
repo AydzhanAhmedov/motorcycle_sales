@@ -14,7 +14,8 @@ public class AdvertisementWithDetailsSpecification : Specification<Advertisement
     {
         Query
             .Include(ad => ad.Brand)
-            .Include(ad => ad.Model);
+            .Include(ad => ad.Model)
+            .Include(ad => ad.User);
 
         if (bOnlyActive)
         {
@@ -32,7 +33,8 @@ public class AdvertisementWithDetailsSpecification : Specification<Advertisement
         Query
             .Where(ad => ad.Id == Id)
             .Include(ad => ad.Brand)
-            .Include(ad => ad.Model);
+            .Include(ad => ad.Model)
+            .Include(ad => ad.User);
 
         if (bOnlyActive)
         {
@@ -51,6 +53,7 @@ public class AdvertisementWithDetailsSpecification : Specification<Advertisement
             .Where(ad => ad.UserId == Id)
             .Include(ad => ad.Brand)
             .Include(ad => ad.Model);
+           // .Include(ad => ad.User);
 
         if (bOnlyActive)
         {
@@ -99,5 +102,6 @@ public class AdvertisementWithDetailsSpecification : Specification<Advertisement
 
         Query.Include(ad => ad.Brand)
             .Include(ad => ad.Model);
+            //.Include(ad => ad.User);
     }
 }

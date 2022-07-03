@@ -1,0 +1,136 @@
+﻿@using motorcycle_sales.Core.Attributes
+@model IEnumerable<Advertisement>
+
+@{
+    ViewBag.Title = "Confirm advertisements";
+}
+
+@{
+    string GetColorByStatus(AdvertisementStatus status)
+    {
+        switch (status)
+        {
+            case AdvertisementStatus.Pending:
+                return "#ebae34";
+            case AdvertisementStatus.Active:
+                return "#50a832";
+            case AdvertisementStatus.Inactive:
+                return "#d40f0f";
+        }
+
+        return "";
+    }
+}
+<h1>Pending Advertisements </h1>
+
+<table class="table table-striped" id="userTable">
+    <thead>
+        <tr>
+            <th>
+                Id
+            </th>
+            <th>
+                Category
+            </th>
+            <th>
+                Brand
+            </th>
+            <th>
+                Model
+            </th>
+            <th>
+                Price
+            </th>
+            <th>
+                Status
+            </th>
+            <th style="padding-right: 15px" class="text-align-end">
+                Actions
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var advertisement in Model)
+        {
+            <tr>
+                <td>
+                    <a>
+                        @advertisement.Id
+                    </a>
+                </td>
+                <td>
+                    <a>
+                        @advertisement.Category
+                    </a>
+                </td>
+                <td>
+                    <a>
+                        @advertisement.Brand.Name
+                    </a>
+                </td>
+                <td>
+                    <a>
+                        @advertisement.Model.Name
+                    </a>
+                </td>
+                <td>
+                    <a>
+                        @advertisement.Price
+                    </a>
+                </td>
+                <td>
+                    <a id="status-@advertisement.Id" style="color: @advertisement.Status.GetColor();">
+                        @advertisement.Status
+                    </a>
+                </td>
+                <td style="padding-right: 15px" class="text-align-end">
+                    <button id="approve-@advertisement.Id" type="button" class="btn btn-success" onclick="ChangeStatus(@advertisement.Id, 1)"><i class="bi bi-file-earmark-check"></i></button>
+                    <button id="reject-@advertisement.Id" type="button" class="btn btn-danger" onclick="ChangeStatus(@advertisement.Id, 2)"><i class="bi bi-file-earmark-x"></i></button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts
+{
+<script>
+function ChangeStatus(id, status) {
+    $.ajax({
+        type: "POST",
+        url: '@Url.Action("ChangeStatus")',
+        data: {
+            adId: id,
+            status: status
+        },
+        success: function(response) {
+            UpdateRow(id,response);
+        },
+        failure: function(response) {
+            alert(response.responseText);
+        },
+        error: function(response) {
+            alert(response.responseText);
+        }
+    });
+}
+
+
+function UpdateRow(id, response) {
+    // TODO Remove words use enums instead
+
+    $("#status-"+id).text(response.newStatus);
+    $("#status-"+id).css("color",response.newColor);
+
+    console.log(response.newStatus);
+    if (response.newStatus == 'Active' /* Active */){
+        $("#approve-"+id).hide();
+        $("#reject-"+id).show();
+    }
+    if (response.newStatus == 'Inactive' /* Inactive */){
+        $("#approve-"+id).show();
+        $("#reject-"+id).hide();
+    }
+}
+</script>
+}

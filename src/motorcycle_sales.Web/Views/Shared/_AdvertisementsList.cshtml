@@ -11,6 +11,7 @@
 
                 <div class="card-header" style="background-color: #e3f2fd;">
                     <h3>@advertisement.Brand.Name @advertisement.Model.Name</h3>
+                    <p> @advertisement.CreationDate.ToString("dd/MM/yyyy HH:mm") | @advertisement.User.City</p>
                 </div>
 
 
@@ -18,10 +19,12 @@
                 <div>
                     <h4 class="ad-price">@price</h4>
                 </div>
+
                 <a asp-controller="advertisement" asp-action="view"
                asp-route-id="@advertisement.Id"
                class="stretched-link"></a>
             </div>
+@*              <div class="card-footer bg-transparent" style ="border: 1px solid black; border-top: 0;">Footer</div>*@
         </div>
         @*        <div class="card m-3 card-3" style="width: 18rem;">
             <img class="card-img-top" src="@photoPath" alt="Card image cap" asp-append-version="true">

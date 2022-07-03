@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,6 +29,8 @@ public class Advertisement : BaseEntity, IAggregateRoot
     public string? Description { get; set; }
     public string? PhotoPath { get; set; }
     public string UserId { get; set; }
+    [ForeignKey("UserId")]
+    public virtual ApplicationUser User { get; set; }
     public DateTime CreationDate { get; set; }
     public AdvertisementStatus Status { get; set; }
     // Other side of the many to many relation - advertisement can be favorited from many users

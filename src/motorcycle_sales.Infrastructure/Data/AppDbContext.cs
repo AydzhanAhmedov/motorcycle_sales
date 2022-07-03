@@ -33,6 +33,11 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
+        {
+            relationship.DeleteBehavior = DeleteBehavior.Restrict;
+        }
+
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.ApplyAllConfigurationsFromCurrentAssembly();
@@ -46,6 +51,9 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
         modelBuilder.Entity<Advertisement>().Navigation(e => e.Brand).AutoInclude();
         modelBuilder.Entity<Advertisement>().Navigation(e => e.Model).AutoInclude();
 
+        modelBuilder.Entity<Advertisement>()
+            .HasOne(ad => ad.User)
+            .WithMany();
 
         // modelBuilder.Entity<Advertisement>().Navigation(e => e.FavoritedFromUsers).AutoInclude();
 

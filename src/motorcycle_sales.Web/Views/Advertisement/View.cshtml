@@ -1,4 +1,5 @@
 ﻿@inject SignInManager<ApplicationUser> signInManager;
+@inject UserManager<ApplicationUser> userManager;
 
 @model Advertisement
 
@@ -14,14 +15,29 @@
         <br>
         <div class="row">
             <div class="col-md-9 col-xs-12 ad-nav">
-                @if (signInManager.IsSignedIn(User))
+                @{
+                    bool bUserSigned = signInManager.IsSignedIn(User);
+                    bool bOwnAdvertisement = false;
+                    if (bUserSigned)
+                        bOwnAdvertisement = userManager.GetUserId(User) == Model.UserId;
+                }
+                @if (bUserSigned)
                 {
                     <button id="FavoriteThis" style="display: none;"> Favorite This ❤️</button>
-                    <button id="Unfavorite"  style="display: none;"> Unfavorite </button>
+                    <button id="Unfavorite" style="display: none;"> Unfavorite </button>
 
                 }
-                <button> Report 🚩</button>
-                <button> Edit ⚙️</button>
+                @if (bUserSigned)
+                {
+                    @if (bOwnAdvertisement)
+                    {
+                        <button> Edit ⚙️</button>
+                    }
+                    else
+                    {
+                        <button> Report 🚩</button>
+                    }
+                }
                 <!-- TODO Show this when advertisements is favorited -->
                 <!-- <button> Favorite ✔️</button> -->
             </div>
@@ -29,7 +45,7 @@
 
                 <!-- TODO -->
                 <!-- Advertisement creation date -->
-                <p class="align-right">@Model.CreationDate</p>
+                <p class="align-right">@Model.CreationDate.ToString("dd/MM/yyyy HH:mm")</p>
             </div>
         </div>
         <div class="row">
@@ -58,13 +74,22 @@
                 </ul>
             </div>
         </div>
-        <div class="row">
+
+        <div class="row" style="width:100%; border: solid gray 1px; margin-top: 10px;">
             <div class="col">
-                <!-- TODO Add advrtisement creation date initialize it when ad is inserted to database -->
-                <!-- Advertisement creation date -->
                 <br>
                 <h5> Additional Description:</h5>
                 <p> @Model.Description</p>
+            </div>
+        </div>
+
+        <div class="row" style="width:100%; border: solid gray 1px; margin-top: 10px;">
+            <div class="col">
+                <br>
+                <h5> Seller info:</h5>
+                <p> <i class="bi bi-geo-alt"></i>  @Model.User.City, @Model.User.Region</p>
+                <p> <i class="bi bi-envelope"></i>  @Model.User.Email</p>
+                <p> <i class="bi bi-telephone"></i>  @Model.User.PhoneNumber</p>
             </div>
         </div>
     </div>
@@ -74,96 +99,96 @@
 {
 <script type="text/javascript">
 
-$(function() {
-    $("#FavoriteThis").click(function() {
+    $(function() {
+        $("#FavoriteThis").click(function() {
 
-        let advertisement = @Html.Raw(Json.Serialize(Model.Id));
-        console.log(advertisement)
-        $.ajax({
-            type: "POST",
-            url: '@Url.Action("AddAdvertisementToFavorite")',
-            data: {
-                advertisementid: advertisement,
-                add: true
-            },
-            success: function(response) {
-                UpdateFavoriteButton();
-            },
-            failure: function(response) {
-                alert(response.responseText);
-            },
-            error: function(response) {
-                alert(response.responseText);
-            }
+            let advertisement = @Html.Raw(Json.Serialize(Model.Id));
+            console.log(advertisement)
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("AddAdvertisementToFavorite")',
+                data: {
+                    advertisementid: advertisement,
+                    add: true
+                },
+                success: function(response) {
+                    UpdateFavoriteButton();
+                },
+                failure: function(response) {
+                    alert(response.responseText);
+                },
+                error: function(response) {
+                    alert(response.responseText);
+                }
+            });
+        });
+
+         $("#Unfavorite").click(function() {
+
+            let advertisement = @Html.Raw(Json.Serialize(Model.Id));
+            console.log(advertisement)
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("AddAdvertisementToFavorite")',
+                data: {
+                    advertisementid: advertisement,
+                    add: false
+                },
+                success: function(response) {
+                    UpdateFavoriteButton();
+                },
+                failure: function(response) {
+                    alert(response.responseText);
+                },
+                error: function(response) {
+                    alert(response.responseText);
+                }
+            });
         });
     });
 
-     $("#Unfavorite").click(function() {
+    function UpdateFavoriteButton() {
 
+
+       // var selectedBrand = $("#Brands").val();
+      // console.log(selectedBrand)
         let advertisement = @Html.Raw(Json.Serialize(Model.Id));
-        console.log(advertisement)
         $.ajax({
-            type: "POST",
-            url: '@Url.Action("AddAdvertisementToFavorite")',
+            type: 'GET',
+            url: '@Url.Action("IsFavorite")',
+            dataType: 'json',
             data: {
-                advertisementid: advertisement,
-                add: false
+                advertisementId: advertisement
             },
-            success: function(response) {
-                UpdateFavoriteButton();
+            success: function(mems) {
+                //$("#Models").append('<option value=""></option>');
+                //$.each(mems, function(i, member) {
+                //    console.log(member)
+                //    $("#Models").append('<option value="' +
+                //        member.value + '">' +
+                //        member.text + '</option>');
+                //});
+                console.log(mems)
+                if (mems == true){
+                    $("#FavoriteThis").hide();
+                    $("#Unfavorite").show();
+                }else{
+                    $("#FavoriteThis").show();
+                    $("#Unfavorite").hide();
+                }
+                console.log($("FavoriteThis").get())
             },
-            failure: function(response) {
-                alert(response.responseText);
-            },
-            error: function(response) {
-                alert(response.responseText);
+            error: function(ex) {
+                console.log("error")
+                alert('Failed to retrieve models.' + ex);
             }
         });
-    });
-});
-
-function UpdateFavoriteButton() {
-
-
-   // var selectedBrand = $("#Brands").val();
-  // console.log(selectedBrand)
-    let advertisement = @Html.Raw(Json.Serialize(Model.Id));
-    $.ajax({
-        type: 'GET',
-        url: '@Url.Action("IsFavorite")',
-        dataType: 'json',
-        data: {
-            advertisementId: advertisement
-        },
-        success: function(mems) {
-            //$("#Models").append('<option value=""></option>');
-            //$.each(mems, function(i, member) {
-            //    console.log(member)
-            //    $("#Models").append('<option value="' +
-            //        member.value + '">' +
-            //        member.text + '</option>');
-            //});
-            console.log(mems)
-            if (mems == true){
-                $("#FavoriteThis").hide();
-                $("#Unfavorite").show();
-            }else{
-                $("#FavoriteThis").show();
-                $("#Unfavorite").hide();
-            }
-            console.log($("FavoriteThis").get())
-        },
-        error: function(ex) {
-            console.log("error")
-            alert('Failed to retrieve models.' + ex);
         }
-    });
-    }
 
-    $(document).ready(function() {
+        $(document).ready(function() {
 
-        console.log("update button")
-        UpdateFavoriteButton();
-    });
+            console.log("update button")
+            UpdateFavoriteButton();
+        });
 </script>
 }

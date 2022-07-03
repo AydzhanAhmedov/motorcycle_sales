@@ -11,4 +11,6 @@ namespace motorcycle_sales.Core.Entities;
 public class ApplicationUser : IdentityUser
 {
     public virtual List<Advertisement> FavoriteAdvertisements { get; set; }
+    public string City { get; set; }
+    public string Region { get; set; }
 }

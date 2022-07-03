@@ -11,7 +11,7 @@
                 <ul class="collapse show nav flex-column ms-1" id="submenu1" data-bs-parent="#menu">
                     <li class="w-100">
                         <a asp-controller="administration" asp-action="listRoles" class="nav-link align-middle px-0">
-                           <i class="fa-solid fa-angle-right"></i> <span class="ms-1 d-none d-sm-inline">Roles</span>
+                            <i class="fa-solid fa-angle-right"></i> <span class="ms-1 d-none d-sm-inline">Roles</span>
                         </a>
                     </li>
                     <li class="w-100">
@@ -28,12 +28,24 @@
                 <ul class="collapse show nav flex-column ms-1" id="submenu2" data-bs-parent="#menu">
                     <li class="w-100">
                         <a asp-controller="catalogManage" asp-action="listBrands" class="nav-link align-middle px-0">
-                           <i class="fa-solid fa-angle-right"></i> <span class="ms-1 d-none d-sm-inline">Brands</span>
+                            <i class="fa-solid fa-angle-right"></i> <span class="ms-1 d-none d-sm-inline">Brands</span>
                         </a>
                     </li>
                     <li class="w-100">
                         <a asp-controller="catalogManage" asp-action="listModels" class="nav-link align-middle px-0">
                             <i class="fa-solid fa-angle-right"></i> <span class="ms-1 d-none d-sm-inline">Models</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="#submenu3" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
+                    <i class="far fa-list-alt" fa-lg></i> <span class="ms-1 d-none d-sm-inline">Advertisements</span>
+                </a>
+                <ul class="collapse show nav flex-column ms-1" id="submenu3" data-bs-parent="#menu">
+                    <li class="w-100">
+                        <a asp-controller="advertisementManage" asp-action="listConfirm" class="nav-link align-middle px-0">
+                            <i class="fa-solid fa-angle-right"></i> <span class="ms-1 d-none d-sm-inline">Confirm</span>
                         </a>
                     </li>
                 </ul>
