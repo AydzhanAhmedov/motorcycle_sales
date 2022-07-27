@@ -10,7 +10,15 @@ namespace motorcycle_sales.Core.Entities;
 
 public class ApplicationUser : IdentityUser
 {
-    public virtual List<Advertisement> FavoriteAdvertisements { get; set; }
+    public ApplicationUser()
+    {
+    }
+
+    public ApplicationUser(string userName)
+    {
+        this.UserName = userName;
+    }
+    public virtual List<Advertisement> FavoriteAdvertisements { get; set; } = new List<Advertisement>();
     public string City { get; set; }
     public string Region { get; set; }
 }

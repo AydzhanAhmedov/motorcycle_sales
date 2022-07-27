@@ -231,4 +231,36 @@ public class AdministrationController : Controller
 
         return Ok();
     }
+
+    [HttpGet]
+    public async Task<ActionResult> EditUser(string userId)
+    {
+        var user = await _userManager.FindByIdAsync(userId);
+
+        if (user == null)
+            return NotFound();
+
+        return View(user);
+    }
+
+    [HttpPost]
+    public async Task<ActionResult> EditUser(ApplicationUser user)
+    {
+        var userUpdate = await _userManager.FindByIdAsync(user.Id);
+
+        if (user == null)
+            return NotFound();
+
+        userUpdate.Email = user.Email;
+        userUpdate.UserName = user.Email;
+        userUpdate.PhoneNumber = user.PhoneNumber;
+        userUpdate.City = user.City;
+        userUpdate.Region = user.Region;
+
+        var result = await _userManager.UpdateAsync(userUpdate);
+        if (!result.Succeeded)
+            return BadRequest();
+
+        return RedirectToAction("ListUsers");
+    }
 }

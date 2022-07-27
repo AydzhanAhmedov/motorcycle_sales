@@ -17,6 +17,7 @@ public class CreateAdvertisementViewModel
     [DisplayName("Brand")]
     public int BrandId { get; set; }
     public SelectList? Brands { get; set; }
+    [DisplayName("Production Year")]
     public int ProductionYear { get; set; }
     public SelectList? Years { get; set; }
     public int Month { get; set; }
@@ -24,7 +25,9 @@ public class CreateAdvertisementViewModel
     [DisplayName("Engine Type")]
     public EngineType EngineType { get; set; }
     public string Modification { get; set; }
+    [DisplayName("Horse Power")]
     public int HorsePower { get; set; }
+    [DisplayName("Engine Capacity")]
     public int EngineCapacity { get; set; }
     [DisplayName("Transmission Type")]
     public TransmissionType TransmissionType { get; set; }

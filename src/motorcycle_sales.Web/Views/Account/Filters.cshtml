@@ -21,7 +21,7 @@
                         </div>
                         <div class="col-md-8">
 
-                            <button>Search using filter 🔍</button>
+                            <button  onclick="location.href='@Url.Action("Search","Advertisement", new {filterId=@searchFilter.Id })  '"   >Search using filter 🔍</button>
                             <button>Delete ❌</button>
 
                         </div>

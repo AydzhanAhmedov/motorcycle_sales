@@ -45,7 +45,7 @@
                         </a>
 
                         <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuLink">
-                            <li><a class="dropdown-item" href="#">Edit User</a></li>
+                            <li><a class="dropdown-item" asp-controller="administration" asp-action="editUser" asp-route-userId=@user.Id>Edit User</a></li>
                             <li><a class="dropdown-item" asp-controller="administration" asp-action="manageUserRoles" asp-route-userId=@user.Id >Manage Roles</a></li>
                         </ul>
                     </div>

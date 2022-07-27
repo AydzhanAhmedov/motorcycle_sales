@@ -17,8 +17,6 @@ public class PermissionAuthorizationHandler : AuthorizationHandler<PermissionReq
             return;
         }
 
-        var claimList = context.User.Claims.ToList(); 
-
         var permissionss = context.User.Claims.Where(x => x.Type == "Permission" && x.Value == requirement.Permission);
         
         if (permissionss.Any())

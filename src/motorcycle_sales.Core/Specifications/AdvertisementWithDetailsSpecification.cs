@@ -95,13 +95,13 @@ public class AdvertisementWithDetailsSpecification : Specification<Advertisement
         if (filter.ProductionYearTo != null)
             Query.Where(ad => ad.ProductionYear <= filter.ProductionYearTo);
 
-        if (!bOnlyActive)
+        if (bOnlyActive)
         {
             Query.Where(ad => ad.Status == AdvertisementStatus.Active);
         }
 
         Query.Include(ad => ad.Brand)
-            .Include(ad => ad.Model);
-            //.Include(ad => ad.User);
+            .Include(ad => ad.Model)
+            .Include(ad => ad.User);
     }
 }

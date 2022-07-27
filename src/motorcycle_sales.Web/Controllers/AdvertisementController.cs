@@ -25,6 +25,7 @@ public class AdvertisementController : Controller
     private readonly IReadRepository<Model> _modelRepository;
     private readonly IRepository<Advertisement> _advertisementRepository;
     private readonly IRepository<UserSearchFilter> _userSearchFilteRepository;
+    private readonly IRepository<AdvertisementSearchFilter> _advertisementFilterRepository;
     private readonly IHostingEnvironment _hostingEnvironment;
     private readonly ILogger<AdvertisementController> _logger;
     private readonly UserManager<ApplicationUser> _userManager;
@@ -37,7 +38,8 @@ public class AdvertisementController : Controller
         , IHostingEnvironment hostingEnvironment
         , ILogger<AdvertisementController> logger
         , IUserSearchFilterService userSearchFilterService
-        , UserManager<ApplicationUser> userManager)
+        , UserManager<ApplicationUser> userManager
+        , IRepository<AdvertisementSearchFilter> advertisementFilterRepositroy)
     {
         _advertisementService = advertisementService;
         _brandRepository = brandRepository;
@@ -47,6 +49,7 @@ public class AdvertisementController : Controller
         _hostingEnvironment = hostingEnvironment;
         _logger = logger;
         _userManager = userManager;
+        _advertisementFilterRepository = advertisementFilterRepositroy;
     }
 
     public async Task<IActionResult> Create()
@@ -72,6 +75,7 @@ public class AdvertisementController : Controller
         return View(createAdvertisementModel);
     }
 
+    //[Authorize(Policy = "Permission.Advertisement.Edit")]
     [HttpPost]
     public async Task<ActionResult> CreateAsync(CreateAdvertisementViewModel createAdvertisementModel)
     {
@@ -123,7 +127,7 @@ public class AdvertisementController : Controller
         UserSearchFilterSpecification x = new UserSearchFilterSpecification(advertisement);
 
         // Add event for email notification
-        advertisement.Events.Add(new NewAdvertisementCreatedEvent(advertisement));
+        //advertisement.Events.Add(new NewAdvertisementCreatedEvent(advertisement));
 
         await _advertisementRepository.AddAsync(advertisement);
 
@@ -189,7 +193,6 @@ public class AdvertisementController : Controller
 
         return View(model);
     }
-
 
     public async Task<IActionResult> SaveSearchFilter(AdvertisementSearchFilter searchFilter)
     {

@@ -24,6 +24,10 @@ public class RegisterViewModel
     [DataType(DataType.PhoneNumber)]
     [RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Not a valid phone number")]
     public string PhoneNumber { get; set; }
+
+    [Required]
     public string City { get; set; }
+
+    [Required]
     public string Region { get; set; }
 }

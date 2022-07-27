@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using motorcycle_sales.Core.Attributes;
 using motorcycle_sales.Core.Entities.AdvertisementAggregate;
+using motorcycle_sales.Core.ProjectAggregate.Events;
 using motorcycle_sales.Core.Specifications;
 using motorcycle_sales.SharedKernel.Interfaces;
 
@@ -24,12 +26,20 @@ public class AdvertisementManageController : Controller
     }
 
     [HttpPost]
+    [Authorize(Policy = "Permission.Advertisement.Approve")]
     public async Task<IActionResult> ChangeStatus(int adId, AdvertisementStatus status)
     {
         var advertisement = await _advertisementRepository.GetByIdAsync(adId);
         if (advertisement == null)
         {
             return NotFound();
+        }
+
+        if (advertisement.Status == AdvertisementStatus.Pending && status == AdvertisementStatus.Active)
+        {
+            // if ad status is changing from Initial to Active then we activate notification event
+            // Add event for email notification
+            advertisement.Events.Add(new NewAdvertisementCreatedEvent(advertisement));
         }
 
         advertisement.Status = status;

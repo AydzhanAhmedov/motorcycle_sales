@@ -76,7 +76,9 @@ public class AccountController : Controller
         {
             UserName = model.Email,
             Email = model.Email,
-            PhoneNumber = model.PhoneNumber
+            PhoneNumber = model.PhoneNumber,
+            City = model.City,
+            Region = model.Region
         };
 
         var result = await _userManager.CreateAsync(identityUser, model.Password);
